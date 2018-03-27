@@ -23,6 +23,7 @@ int is_valid_board(int **board);
 void show_board(int **board);
 int *memory_manage_1d();
 int **memory_manage_2d();
+int **memory_manage_sub2d();
 
 // Memorize row and column on board
 typedef struct{
@@ -185,6 +186,19 @@ int **memory_manage_2d() {
     for (int i = 0; i < 9; ++i) {
         arr[i] = malloc(9 * sizeof(int ));
         for (int j = 0; j < 9; ++j) {
+            arr[i][j] = 0;
+        }
+    }
+    return arr;
+}
+
+int **memory_manage_sub2d() {
+    /* Memory manage 2-Dimension Array */
+    int **arr;
+    arr = malloc(3 * sizeof(int *));
+    for (int i = 0; i < 3; ++i) {
+        arr[i] = malloc(3 * sizeof(int ));
+        for (int j = 0; j < 3; ++j) {
             arr[i][j] = 0;
         }
     }

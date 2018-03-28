@@ -1,41 +1,41 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 // #include <python.h>
 #define True 1
 #define False 0
 #define is ==
 #define isnot !=
-#define empty_slot 0
+#define EmptySlot 0
 
 // Global Variables
 int possible_num, test = 0;
 
 // Declare Function
-int **board_init();
-int solve_board(int **board, int row, int col);
-int find_empty_slot(int **board, int row, int col);
-int append_in(int num, int **board, char *cmp);
-int can_fill(int num, int **board);
-int *determine_num(int **board);
-int is_valid_board(int **board);
-void show_board(int **board);
-int *memory_manage_1d();
-int **memory_manage_2d();
-int **memory_manage_sub2d();
+int **Init_Board(int row, int col);
+int Find_EmptySlot(int **board, int start_r, int start_c);
+int CanFillIn(int num, int **board, int size_r, int size_c);
+int *Candidate_Digit(int **board, int size_r, int size_c);
+int *Eliminate_Digit(int **board, int *Digit_arr, int row, int col, int size);
+int AppendIn(int num, int **board, int size_r, int size_c, char cmp);
+int IsValid_Board(int **board, int size_r, int size_c);
+void Show_Board(int **board, int size_r, int size_c);
+int **Init_Board(int size_r, int size_c);
+int ArrayCount_1D(int *arr, int size);
+int ArrayCount_2D(int **arr, int size_r, int size_c);
+int *MemoryManage_1D(int size);
+int **MemoryManage_2D(int row, int col);
 
 // Memorize row and column on board
 typedef struct{
     int x;
     int y;
-    int *pos_lst;
-    int pos_num;
+    int *arr;
+    int num;
 } sudo;
 sudo cell[9][9];
+sudo eliminate[9][9];
+sudo lock[9][9];
 
 typedef struct{
-    int *lst;
+    int *arr;
     int num;
 } sudo2;
 sudo2 filled[27];
@@ -47,12 +47,12 @@ typedef struct{
 } point;
 point coord;
 
-int find_empty_slot(int **board, int row, int col) {
+int Find_EmptySlot(int **board, int start_r, int start_c) {
     /* Return True if found empty slot on board, False otherwise */
-    int i = row, j = col;
+    int i = start_r, j = start_c;
     for (; i < 9; ) {
         for (; j < 9; ) {
-            if (board[i][j] is empty_slot) {
+            if (board[i][j] is EmptySlot) {
                 coord.x = i;
                 coord.y = j;
                 return True;
@@ -65,23 +65,40 @@ int find_empty_slot(int **board, int row, int col) {
     return False;
 }
 
-int *determine_num(int **board) {
+int *Candidate_Digit(int **board, int size_r, int size_c) {
     /* Find all possible numbers that can fill on board */
-    int *num_lst, num = 0;
-    num_lst = memory_manage_1d(num_lst);
+    int *Digit_arr, num = 0;
+    Digit_arr = MemoryManage_1D(size_r);
     for (int i = 0; i < 9; ++i) {
-        if (can_fill(i + 1, board) is True) {
-            num_lst[i] = i + 1;
+        if (CanFillIn(i + 1, board, size_r, size_c) is True) {
+            Digit_arr[i] = i + 1;
             ++num;
         }
     }
     coord.len = num;
-    return num_lst;
+    Digit_arr = Eliminate_Digit(board, Digit_arr, coord.x, coord.y, size_r);
+    return Digit_arr;
 }
 
-int can_fill(int num, int **board) {
+int *Eliminate_Digit(int **board, int *Digit_arr, int row, int col, int size) {
+    int num = 0;
+    for (int i = 0; i < 9; ++i) {
+        if (eliminate[row][col].arr[i] isnot EmptySlot) {
+            if (eliminate[row][col].arr[i] is Digit_arr[i]) {
+                Digit_arr[i] = 0;
+                ++num;
+            }
+        }
+    }
+    coord.len -= num;
+    return Digit_arr;
+}
+
+int CanFillIn(int num, int **board, int size_r, int size_c) {
     /* Return True if number can fill on board, False otherwise */
-    if (append_in(num, board, "row") && append_in(num, board, "col") && append_in(num, board, "sub")) {
+    if (AppendIn(num, board, size_r, size_c, 'r') 
+        && AppendIn(num, board, size_r, size_c , 'c') 
+        && AppendIn(num, board, size_r, size_c , 's')) {
         return True;
     }
     else {
@@ -89,27 +106,44 @@ int can_fill(int num, int **board) {
     }
 }
 
-int append_in(int num, int **board, char *cmp) {
+int AppendIn(int num, int **board, int size_r, int size_c, char cmp) {
     /* Check Sudoku's Three rule */
-    if (strcasecmp(cmp, "row") is False) {
-        for (int i = 0; i < 9; ++i) {
-            if (board[coord.x][i] is num && i isnot coord.y) {
-                return False;
+    int sub_x, sub_y;
+    switch(cmp) {
+        case 'r':
+            for (int i = 0; i < size_c; ++i) {
+                if (board[coord.x][i] is num && i isnot coord.y) {
+                    return False;
+                }
             }
-        }
-    }
-    else if (strcasecmp(cmp, "col") is False) {
-        for (int i = 0; i < 9; ++i) {
-            if (board[i][coord.y] is num && i isnot coord.x) {
-                return False;
+        case 'c':
+            for (int i = 0; i < size_r; ++i) {
+                if (board[i][coord.y] is num && i isnot coord.x) {
+                    return False;
+                }
             }
-        }
+        case 's':
+            sub_x = (coord.x % 3 is 0) ? coord.x: coord.x - (coord.x % 3);
+            sub_y = (coord.y % 3 is 0) ? coord.y: coord.y - (coord.y % 3);
+            for (int i = sub_x; i < sub_x + 3; ++i) {
+                for (int j = sub_y; j < sub_y + 3; ++j) {
+                    if (board[i][j] is num && (i isnot coord.x && j isnot coord.y)) {
+                        return False;
+                    }
+                }
+            }
     }
-    else if (strcasecmp(cmp, "sub") is False) {
-        int sub_x = (coord.x % 3 is 0) ? coord.x: coord.x - (coord.x % 3), sub_y = (coord.y % 3 is 0) ? coord.y: coord.y - (coord.y % 3);
-        for (int i = sub_x; i < sub_x + 3; ++i) {
-            for (int j = sub_y; j < sub_y + 3; ++j) {
-                if (board[i][j] is num && (i isnot coord.x && j isnot coord.y)) {
+    return True;
+}
+
+int IsValid_Board(int **board, int size_r, int size_c) {
+    /* Return True if board have solution, False otherwise */
+    for (int i = 0; i < size_r; ++i) {
+        for (int j = 0; j < size_c; ++j){
+            if (board[i][j] isnot EmptySlot) {
+                coord.x = i;
+                coord.y = j;
+                if (CanFillIn(board[i][j], board, size_r, size_c) is False) {
                     return False;
                 }
             }
@@ -118,25 +152,11 @@ int append_in(int num, int **board, char *cmp) {
     return True;
 }
 
-int is_valid_board(int **board) {
-    /* Return True if board have solution, False otherwise */
-    for (int i = 0; i < 9; ++i) {
-        for (int j = 0; j < 9; ++j){
-            if (board[i][j] isnot empty_slot) {
-                if (can_fill(board[i][j], board)) {
-                    return True;
-                }
-            }
-        }
-    }
-    return False;
-}
-
-void show_board(int **board) {
-    /* Show each number on board */
+void Show_Board(int **board, int size_r, int size_c) {
+    /* Show each digit on board */
     printf("------------------------\n");
-    for (int i = 0; i < 9; ++i) {
-        for (int j = 0; j < 9; ++j) {
+    for (int i = 0; i < size_r; ++i) {
+        for (int j = 0; j < size_c; ++j) {
             (j == 0) ? printf("| "): 1;
             printf("%d ", board[i][j]);
             (j % 3 == 2) ? printf("| "): 1;
@@ -146,21 +166,10 @@ void show_board(int **board) {
     }
 }
 
-int **board_init() {
+int **Init_Board(int size_r, int size_c) {
     /* Create Sudoku's board */
     int **board;
-    board = memory_manage_2d();
-    int sol[9][9] = {{0, 0, 0,   0, 0, 0,   0, 0, 0},
-                     {0, 8, 0,   6, 0, 0,   0, 7, 5},
-                     {0, 1, 4,   5, 0, 0,   0, 0, 0},
-
-                     {0, 0, 3,   2, 9, 0,   6, 0, 0},
-                     {7, 0, 0,   0, 8, 0,   0, 0, 9},
-                     {0, 0, 8,   0, 4, 6,   3, 0, 0},
-
-                     {0, 0, 0,   0, 0, 3,   1, 2, 0},
-                     {6, 2, 0,   0, 0, 9,   0, 4, 0},
-                     {0, 0, 0,   0, 0, 0,   0, 0, 0}};
+    board = MemoryManage_2D(size_r, size_c);
     for (int i = 0; i < 9; ++i) {
         for (int j = 0; j < 9; ++j) {
             scanf("%d", &board[i][j]);
@@ -169,36 +178,45 @@ int **board_init() {
     return board;
 }
 
-int *memory_manage_1d() {
+int ArrayCount_1D(int *arr, int size) {
+    int num = 0;
+    for (int i = 0; i < size; ++i) {
+        if (arr[i] isnot EmptySlot) {
+            ++num;
+        }
+    }
+    return num;
+}
+
+int ArrayCount_2D(int **arr, int size_r, int size_c) {
+    int num = 0;
+    for (int i = 0; i < size_r; ++i) {
+        for (int j = 0; j < size_c; ++j) {
+            if (arr[i][j] isnot EmptySlot) {
+            ++num;
+            }
+        }
+    }
+    return num;
+}
+
+int *MemoryManage_1D(int size) {
     /* Memory manage 1-Dimension Array */
     int *arr;
-    arr = malloc(9 * sizeof(int));
-    for (int i = 0; i < 9; ++i) {
+    arr = malloc(size * sizeof(int));
+    for (int i = 0; i < size; ++i) {
         arr[i] = 0;
     }
     return arr;
 }
 
-int **memory_manage_2d() {
+int **MemoryManage_2D(int size_r, int size_c) {
     /* Memory manage 2-Dimension Array */
     int **arr;
-    arr = malloc(9 * sizeof(int *));
-    for (int i = 0; i < 9; ++i) {
-        arr[i] = malloc(9 * sizeof(int ));
-        for (int j = 0; j < 9; ++j) {
-            arr[i][j] = 0;
-        }
-    }
-    return arr;
-}
-
-int **memory_manage_sub2d() {
-    /* Memory manage 2-Dimension Array */
-    int **arr;
-    arr = malloc(3 * sizeof(int *));
-    for (int i = 0; i < 3; ++i) {
-        arr[i] = malloc(3 * sizeof(int ));
-        for (int j = 0; j < 3; ++j) {
+    arr = malloc(size_r * sizeof(int *));
+    for (int i = 0; i < size_r; ++i) {
+        arr[i] = malloc(size_c * sizeof(int ));
+        for (int j = 0; j < size_c; ++j) {
             arr[i][j] = 0;
         }
     }

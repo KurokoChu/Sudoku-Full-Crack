@@ -68,12 +68,12 @@ void Block_LockedPair(int **board, int row_block, int col_block) {
     int sub_x = (row_block % 3 is 0) ? row_block: row_block - (row_block % 3), sub_y = (col_block % 3 is 0) ? col_block: col_block - (col_block % 3);
     for (int i = sub_x; i < sub_x + 3; ++i) {
         for (int j = sub_y; j < sub_y + 3; ++j) {
-            if (board[i][j] is EmptySlot 
-                && (i isnot coord_pair.x1 && j isnot coord_pair.y1)
-                && (i isnot coord_pair.x2 && j isnot coord_pair.y2)) {
-                for (int k = 0; k < 9; ++k) {
-                    if (cell[row_block][col_block].arr[k] isnot EmptySlot) {
-                        eliminate[i][j].arr[k] = cell[row_block][col_block].arr[k];
+            if (board[i][j] is EmptySlot) {
+                if ((i isnot coord_pair.x1 && j isnot coord_pair.y1) || (i isnot coord_pair.x2 && j isnot coord_pair.y2)) {
+                    for (int k = 0; k < 9; ++k) {
+                        if (cell[row_block][col_block].arr[k] isnot EmptySlot) {
+                            eliminate[i][j].arr[k] = cell[row_block][col_block].arr[k];
+                        }
                     }
                 }
             }

@@ -5,6 +5,8 @@ int FullHouse_Sub(int **board, int row, int col);
 int Find_NakedSingle(int **board, int row, int col);
 int Find_HiddenSingle(int **board, int row, int col);
 int Find_BlockNumber(int **board, int row, int col, int num);
+int Find_RowBlock(int **board, int row, int col, int num);
+int Find_ColBlock(int **board, int row, int col, int num);
 
 int Find_FullHouse(int **board, int row, int col) {
     if (FullHouse_Row(board, row, col) is True) {
@@ -98,7 +100,11 @@ int Find_HiddenSingle(int **board, int row, int col) {
     for (int i = 0; i < 9; ++i) {
         if (cell[row][col].arr[i] isnot EmptySlot) {
             if (Find_BlockNumber(board, row, col, cell[row][col].arr[i]) is True) {
-                board[row][col] = cell[row][col].arr[i];
+                coord.x = row;
+                coord.y = col;
+                if (CanFillIn(cell[row][col].arr[i], board, 9, 9) is True) {
+                    board[row][col] = cell[row][col].arr[i];
+                }
                 return True;
             }
         }
@@ -126,5 +132,36 @@ int Find_BlockNumber(int **board, int row, int col, int num) {
     if (ArrayCount_2D(count, 3, 3) is 8) {
         return True;
     }
+    if (Find_RowBlock(board, row, col, num) is True || Find_ColBlock(board, row, col, num) is True) {
+        return True;
+    }
     return False;
+}
+
+int Find_RowBlock(int **board, int row, int col, int num) {
+    int same = 0;
+    for (int i = 0; i < 9; ++i) {
+        if (board[row][i] is EmptySlot) {
+            if (i isnot col) {
+                if (cell[row][i].arr[num - 1] isnot EmptySlot) {
+                    return False;
+                }
+            }
+        }
+    }
+    return same is 0;
+}
+
+int Find_ColBlock(int **board, int row, int col, int num) {
+    int same = 0;
+    for (int i = 0; i < 9; ++i) {
+        if (board[i][col] is EmptySlot) {
+            if (i isnot row) {
+                if (cell[i][col].arr[num - 1] isnot EmptySlot) {
+                    return False;
+                }
+            }
+        }
+    }
+    return same is 0;
 }

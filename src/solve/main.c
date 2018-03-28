@@ -31,18 +31,26 @@ int main() {
     int **sudoku, size_r = 9, size_c = 9;
     sudoku = Init_Board(size_r, size_c);
     if (IsValid_Board(sudoku, size_r, size_c)) {
-        printf("calculating . . .\n");
+        printf("\nPlaying . . .\n\n");
         if (Solve_Board(sudoku, 0, 0, size_r, size_c) is True) {
-            printf("\nfinish!\n");
-            Show_Board(sudoku, size_r, size_c);
-            printf("%d Full House (%d)\n", p.fullhouse, p.fullhouse * 4);
-            printf("%d Naked Single (%d)\n", p.nakedsingle, p.nakedsingle * 4);
-            printf("%d Hidden Single (%d)\n", p.hiddensingle, p.hiddensingle * 14);
-            printf("%d Locked Pair (%d)\n", p.lockedpair, p.lockedpair * 40);
-            printf("Total : %d\n", (p.fullhouse * 4) + (p.nakedsingle * 4) + (p.hiddensingle * 14) + (p.lockedpair * 40));
+            if (Find_EmptySlot(sudoku, 0, 0) is False) {
+                if (IsValid_Board(sudoku, size_r, size_c) is True) {
+                    printf("\nFinish!\n");
+                    Show_Board(sudoku, size_r, size_c);
+                    printf("%d Full House (%d)\n", p.fullhouse, p.fullhouse * 4);
+                    printf("%d Naked Single (%d)\n", p.nakedsingle, p.nakedsingle * 4);
+                    printf("%d Hidden Single (%d)\n", p.hiddensingle, p.hiddensingle * 14);
+                    printf("%d Locked Pair (%d)\n", p.lockedpair, p.lockedpair * 40);
+                    printf("Total : %d\n", (p.fullhouse * 4) + (p.nakedsingle * 4) + (p.hiddensingle * 14) + (p.lockedpair * 40));
+                }
+            }
+            else {
+                printf("I need to practice more\n");
+                Show_Board(sudoku, size_r, size_c);
+            }
         }
         else {
-            printf("can't find solution\n");
+            printf("Can't find solution\n");
             Show_Board(sudoku, size_r, size_c);
         }
     }

@@ -6,7 +6,6 @@
 #define EmptySlot 0
 
 // Global Variables
-int possible_num, test = 0;
 
 // Declare Function
 int **Init_Board(int row, int col);

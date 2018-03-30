@@ -64,7 +64,7 @@ int FullHouse_Col(int **board, int row, int col) {
 int FullHouse_Sub(int **board, int row, int col) {
     int count = 0, *fill_arr, sub_x, sub_y;
     fill_arr = MemoryManage_1D(9);
-    sub_x = (row % 3 is 0) ? row: row - (row % 3), sub_y = (col % 3 is 0) ? col: col - (col % 3);
+    sub_x = row - (row % 3), sub_y = col - (col % 3);
     for (int i = sub_x; i < sub_x + 3; ++i) {
         for (int j = sub_y; j < sub_y + 3; ++j) {
             if (board[i][j] isnot EmptySlot) {
@@ -115,7 +115,7 @@ int Find_HiddenSingle(int **board, int row, int col) {
 int Find_BlockNumber(int **board, int row, int col, int num) {
     int **count, sub_x, sub_y;
     count = MemoryManage_2D(9, 9);
-    sub_x = (row % 3 is 0) ? row: row - (row % 3), sub_y = (col % 3 is 0) ? col: col - (col % 3);
+    sub_x = row - (row % 3), sub_y = col - (col % 3);
     for (int i = 0; i < 9; ++i) {
         for (int j = 0; j < 9; ++j) {
             if (board[i][j] is num) {

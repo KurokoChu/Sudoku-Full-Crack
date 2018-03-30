@@ -6,21 +6,24 @@
 #define EmptySlot 0
 
 // Global Variables
+int eliminated = False;
 
 // Declare Function
 int **Init_Board(int row, int col);
 int Find_EmptySlot(int **board, int start_r, int start_c);
 int CanFillIn(int num, int **board, int size_r, int size_c);
 int *Candidate_Digit(int **board, int size_r, int size_c);
-int *Eliminate_Digit(int **board, int *Digit_arr, int row, int col, int size);
+void Eliminate_Digit(int **board, int num, int row, int col);
 int AppendIn(int num, int **board, int size_r, int size_c, char cmp);
 int IsValid_Board(int **board, int size_r, int size_c);
 void Show_Board(int **board, int size_r, int size_c);
 int **Init_Board(int size_r, int size_c);
+void Show_ArrayElement_1D(int *arr, int size);
 int ArrayCount_1D(int *arr, int size);
 int ArrayCount_2D(int **arr, int size_r, int size_c);
 int *MemoryManage_1D(int size);
 int **MemoryManage_2D(int row, int col);
+void Update_Board(int **board, int row, int col);
 
 // Memorize row and column on board
 typedef struct{
@@ -31,12 +34,14 @@ typedef struct{
 } sudo;
 sudo cell[9][9];
 sudo eliminate[9][9];
-sudo lock[9][9];
+sudo lock_pair[9][9];
+sudo lock_can1[9][9];
 
 typedef struct{
     int *arr;
     int num;
 } sudo2;
+sudo2 score[5];
 sudo2 filled[27];
 
 typedef struct{
@@ -70,27 +75,21 @@ int *Candidate_Digit(int **board, int size_r, int size_c) {
     Digit_arr = MemoryManage_1D(size_r);
     for (int i = 0; i < 9; ++i) {
         if (CanFillIn(i + 1, board, size_r, size_c) is True) {
-            Digit_arr[i] = i + 1;
-            ++num;
-        }
-    }
-    coord.len = num;
-    Digit_arr = Eliminate_Digit(board, Digit_arr, coord.x, coord.y, size_r);
-    return Digit_arr;
-}
-
-int *Eliminate_Digit(int **board, int *Digit_arr, int row, int col, int size) {
-    int num = 0;
-    for (int i = 0; i < 9; ++i) {
-        if (eliminate[row][col].arr[i] isnot EmptySlot) {
-            if (eliminate[row][col].arr[i] is Digit_arr[i]) {
-                Digit_arr[i] = 0;
+            if (eliminate[coord.x][coord.y].arr[i] is EmptySlot) {
+                Digit_arr[i] = i + 1;
                 ++num;
             }
         }
     }
-    coord.len -= num;
+    coord.len = num;
     return Digit_arr;
+}
+
+void Eliminate_Digit(int **board, int num, int row, int col) {
+    if (cell[row][col].arr[num - 1] isnot EmptySlot) {
+        eliminated = True;
+        eliminate[row][col].arr[num - 1] = num;
+    }
 }
 
 int CanFillIn(int num, int **board, int size_r, int size_c) {
@@ -122,8 +121,8 @@ int AppendIn(int num, int **board, int size_r, int size_c, char cmp) {
                 }
             }
         case 's':
-            sub_x = (coord.x % 3 is 0) ? coord.x: coord.x - (coord.x % 3);
-            sub_y = (coord.y % 3 is 0) ? coord.y: coord.y - (coord.y % 3);
+            sub_x = coord.x - (coord.x % 3);
+            sub_y = coord.y - (coord.y % 3);
             for (int i = sub_x; i < sub_x + 3; ++i) {
                 for (int j = sub_y; j < sub_y + 3; ++j) {
                     if (board[i][j] is num && (i isnot coord.x && j isnot coord.y)) {
@@ -171,10 +170,25 @@ int **Init_Board(int size_r, int size_c) {
     board = MemoryManage_2D(size_r, size_c);
     for (int i = 0; i < 9; ++i) {
         for (int j = 0; j < 9; ++j) {
-            scanf("%d", &board[i][j]);
+            scanf("%1d", &board[i][j]);
         }
     }
     return board;
+}
+
+void Update_Board(int **board, int row, int col) {
+    if (board[row][col] is EmptySlot) {
+        coord.x = row;
+        coord.y = col;
+        cell[row][col].arr = Candidate_Digit(board, 9, 9);
+        cell[row][col].num = coord.len;
+    }
+}
+
+void Show_ArrayElement_1D(int *arr, int size) {
+    for (int i = 0; i < size; ++i) {
+        (arr[i] isnot EmptySlot) ? printf("%d ", arr[i]): 1;
+    }
 }
 
 int ArrayCount_1D(int *arr, int size) {

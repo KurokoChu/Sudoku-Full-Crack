@@ -20,10 +20,11 @@ int main() {
             lock_can1[i][j].arr = MemoryManage_1D(1);
         }
     }
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 6; ++i) {
         score[i].num = False;
         score[i].arr = MemoryManage_1D(1);
     }
+    coord_pair.arr = MemoryManage_1D(2);
     int **sudoku, size_r = 9, size_c = 9;
     sudoku = Init_Board(size_r, size_c);
     if (IsValid_Board(sudoku, size_r, size_c)) {
@@ -34,6 +35,9 @@ int main() {
                     printf("\nFinish!\n");
                     Show_Board(sudoku, size_r, size_c);
                     Score_Summary();
+                }
+                else {
+                    Show_Board(sudoku, size_r, size_c);
                 }
             }
             else {
@@ -97,6 +101,19 @@ int DoStep(int **board, int row, int col, int size_r, int size_c) {
             next_row = (col + 1 == 9) ? row + 1: row;
             next_col = (col + 1) % 9;
             return Solve_Board(board, next_row, next_col, size_r, size_c);
+        case 6:
+            if (coord_pair.num is 1) {
+                printf("Locked Candidates Type 2 \"Claiming\" : [ %d ] in r%dc%d and r%dc%d\n", 
+                    coord_pair.arr[0], coord_pair.x1 + 1, coord_pair.y1 + 1, coord_pair.x2 + 1, coord_pair.y2 + 1);
+            }
+            else if (coord_pair.num is 2) {
+                printf("Locked Candidates Type 2 \"Claiming\" : [ %d ] in r%dc%d, r%dc%d and r%dc%d\n", 
+                    coord_pair.arr[0], coord_pair.x1 + 1, coord_pair.y1 + 1, coord_pair.x2 + 1, coord_pair.y2 + 1, coord_pair.x3 + 1, coord_pair.y3 + 1);
+            }
+            score[5].arr[0]++;
+            next_row = (col + 1 == 9) ? row + 1: row;
+            next_col = (col + 1) % 9;
+            return Solve_Board(board, next_row, next_col, size_r, size_c);
         default:
             next_row = (col + 1 == 9) ? row + 1: row;
             next_col = (col + 1) % 9;
@@ -125,6 +142,10 @@ int GetStep(int **board, int row, int col) {
     else if (Find_LockedCandidates_1(board, row, col) is True && eliminated is True) {
         (score[4].num is False) ? score[4].num = True: 1;
         return 5;
+    }
+    else if (Find_LockedCandidates_2(board, row, col) is True && eliminated is True) {
+        (score[5].num is False) ? score[5].num = True: 1;
+        return 6;
     }
     return 0;
 }
@@ -155,6 +176,11 @@ void Score_Summary() {
         is_score = True;
         printf("%d Locked Candidates Type 1 \"Pointing\" (%d)\n", score[4].arr[0], score[4].arr[0] * 50);
         count += score[4].arr[0] * 50;
+    }
+    if (score[5].num is True) {
+        is_score = True;
+        printf("%d Locked Candidates Type 2 \"Claiming\" (%d)\n", score[5].arr[0], score[5].arr[0] * 50);
+        count += score[5].arr[0] * 50;
     }
 
     if (is_score is True) {

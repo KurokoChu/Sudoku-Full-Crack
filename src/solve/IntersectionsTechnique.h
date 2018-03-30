@@ -1,5 +1,5 @@
 typedef struct {
-    int x1, y1, x2, y2, num;
+    int x1, y1, x2, y2, x3, y3, *arr, num;
 } point2;
 point2 coord_pair;
 
@@ -9,6 +9,9 @@ int Find_LockedCandidates_1(int **board, int row, int col);
 void Block_LockedRow(int **board, int num, int row_block, int col_block);
 void Block_LockedCol(int **board, int num, int row_block, int col_block);
 void Block_LockedSub(int **board, int num, int row_block, int col_block);
+int Find_LockedCandidates_2(int **board, int row, int col);
+int Count_SameDigit_Row(int **board, int index, int row, int col);
+int Count_SameDigit_Col(int **board, int index, int row, int col);
 
 int Find_LockedPair(int **board, int row, int col) {
     if (cell[row][col].num isnot 2) {
@@ -111,15 +114,16 @@ int Find_LockedCandidates_1(int **board, int row, int col) {
             coord_pair.y1 = col;
             coord_pair.x2 = num_arr[i][1];
             coord_pair.y2 = num_arr[i][2];
-            coord_pair.num = i + 1;
+            coord_pair.arr[0] = i + 1;
+            coord_pair.num = 1;
             if (row is num_arr[i][1]) {
-                Block_LockedRow(board, coord_pair.num, row, col);
+                Block_LockedRow(board, coord_pair.arr[0], row, col);
 
             }
             else if (col is num_arr[i][2]) {
-                Block_LockedCol(board, coord_pair.num, row, col);
+                Block_LockedCol(board, coord_pair.arr[0], row, col);
             }
-            Block_LockedSub(board, coord_pair.num, row, col);
+            Block_LockedSub(board, coord_pair.arr[0], row, col);
             if (eliminated is True) {
                 return True;
             }
@@ -162,4 +166,98 @@ void Block_LockedSub(int **board, int num, int row_block, int col_block) {
             }
         }
     }
+}
+
+int Find_LockedCandidates_2(int **board, int row, int col) {
+    for (int i = 0; i < 9; ++i) {
+        if (cell[row][col].arr[i] isnot EmptySlot) {
+            coord_pair.x1 = row;
+            coord_pair.y1 = col;
+            coord_pair.num = 1;
+            coord_pair.arr[0] = i + 1;
+            if (Count_SameDigit_Row(board, i, row, col) is True) {
+                Block_LockedSub(board, cell[row][col].arr[i], row, col);
+                if (eliminated is True) {
+                    return True;
+                }
+            }
+            if (Count_SameDigit_Col(board, i, row, col) is True) {
+                Block_LockedSub(board, cell[row][col].arr[i], row, col);
+                if (eliminated is True) {
+                    return True;
+                }
+            }
+        }
+    }
+    return False;
+}
+
+int Count_SameDigit_Row(int **board, int index, int row, int col) {
+    int count = 0;
+    for (int i = 0; i < 9; ++i) {
+        if (i is col || board[row][i] isnot EmptySlot) {
+            continue;
+        }
+        if (cell[row][col].arr[index] is cell[row][i].arr[index]) {
+            ++count;
+            if (count is 1) {
+                coord_pair.x2 = row;
+                coord_pair.y2 = i;
+            }
+            else if (count is 2) {
+                coord_pair.x3 = row;
+                coord_pair.y3 = i;
+            }
+        }
+    }
+    if (count is 1
+        && (coord_pair.x2 - (coord_pair.x2 % 3) is row - (row % 3))
+        && (coord_pair.y2 - (coord_pair.y2 % 3) is col - (col % 3))) {
+        coord_pair.num = 1;
+        return True;
+    }
+    else if (count is 2
+        && (coord_pair.x2 - (coord_pair.x2 % 3) is row - (row % 3))
+        && (coord_pair.y2 - (coord_pair.y2 % 3) is col - (col % 3))
+        && (coord_pair.x3 - (coord_pair.x3 % 3) is row - (row % 3))
+        && (coord_pair.y3 - (coord_pair.y3 % 3) is col - (col % 3))) {
+        coord_pair.num = 2;
+        return True;
+    }
+    return False;
+}
+
+int Count_SameDigit_Col(int **board, int index, int row, int col) {
+    int count = 0;
+    for (int i = 0; i < 9; ++i) {
+        if (i is row || board[i][col] isnot EmptySlot) {
+            continue;
+        }
+        if (cell[row][col].arr[index] is cell[i][col].arr[index]) {
+            ++count;
+            if (count is 1) {
+                coord_pair.x2 = i;
+                coord_pair.y2 = col;
+            }
+            else if (count is 2) {
+                coord_pair.x3 = i;
+                coord_pair.y3 = col;
+            }
+        }
+    }
+    if (count is 1
+        && (coord_pair.x2 - (coord_pair.x2 % 3) is row - (row % 3))
+        && (coord_pair.y2 - (coord_pair.y2 % 3) is col - (col % 3))) {
+        coord_pair.num = 1;
+        return True;
+    }
+    else if (count is 2
+        && (coord_pair.x2 - (coord_pair.x2 % 3) is row - (row % 3))
+        && (coord_pair.y2 - (coord_pair.y2 % 3) is col - (col % 3))
+        && (coord_pair.x3 - (coord_pair.x3 % 3) is row - (row % 3))
+        && (coord_pair.y3 - (coord_pair.y3 % 3) is col - (col % 3))) {
+        coord_pair.num = 2;
+        return True;
+    }
+    return False;
 }

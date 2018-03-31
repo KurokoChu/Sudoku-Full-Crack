@@ -1,10 +1,3 @@
-// #include <python.h>
-#define True 1
-#define False 0
-#define is ==
-#define isnot !=
-#define EmptySlot 0
-
 // Global Variables
 int eliminated = False;
 
@@ -16,40 +9,9 @@ int *Candidate_Digit(int **board, int size_r, int size_c);
 void Eliminate_Digit(int **board, int num, int row, int col);
 int AppendIn(int num, int **board, int size_r, int size_c, char cmp);
 int IsValid_Board(int **board, int size_r, int size_c);
-void Show_Board(int **board, int size_r, int size_c);
 int **Init_Board(int size_r, int size_c);
-void Show_ArrayElement_1D(int *arr, int size);
-int ArrayCount_1D(int *arr, int size);
-int ArrayCount_2D(int **arr, int size_r, int size_c);
-int *MemoryManage_1D(int size);
-int **MemoryManage_2D(int row, int col);
 void Update_Board(int **board, int row, int col);
-
-// Memorize row and column on board
-typedef struct{
-    int x;
-    int y;
-    int *arr;
-    int num;
-} sudo;
-sudo cell[9][9];
-sudo eliminate[9][9];
-sudo lock_pair[9][9];
-sudo lock_can1[9][9];
-
-typedef struct{
-    int *arr;
-    int num;
-} sudo2;
-sudo2 score[5];
-sudo2 filled[27];
-
-typedef struct{
-    int x;
-    int y;
-    int len;
-} point;
-point coord;
+void Show_Board(int **board, int size_r, int size_c);
 
 int Find_EmptySlot(int **board, int start_r, int start_c) {
     /* Return True if found empty slot on board, False otherwise */
@@ -150,20 +112,6 @@ int IsValid_Board(int **board, int size_r, int size_c) {
     return True;
 }
 
-void Show_Board(int **board, int size_r, int size_c) {
-    /* Show each digit on board */
-    printf("------------------------\n");
-    for (int i = 0; i < size_r; ++i) {
-        for (int j = 0; j < size_c; ++j) {
-            (j == 0) ? printf("| "): 1;
-            printf("%d ", board[i][j]);
-            (j % 3 == 2) ? printf("| "): 1;
-        }
-        printf("\n");
-        (i % 3 == 2) ? printf("------------------------\n"): 1;
-    }
-}
-
 int **Init_Board(int size_r, int size_c) {
     /* Create Sudoku's board */
     int **board;
@@ -185,53 +133,16 @@ void Update_Board(int **board, int row, int col) {
     }
 }
 
-void Show_ArrayElement_1D(int *arr, int size) {
-    for (int i = 0; i < size; ++i) {
-        (arr[i] isnot EmptySlot) ? printf("%d ", arr[i]): 1;
-    }
-}
-
-int ArrayCount_1D(int *arr, int size) {
-    int num = 0;
-    for (int i = 0; i < size; ++i) {
-        if (arr[i] isnot EmptySlot) {
-            ++num;
-        }
-    }
-    return num;
-}
-
-int ArrayCount_2D(int **arr, int size_r, int size_c) {
-    int num = 0;
+void Show_Board(int **board, int size_r, int size_c) {
+    /* Show each digit on board */
+    printf("------------------------\n");
     for (int i = 0; i < size_r; ++i) {
         for (int j = 0; j < size_c; ++j) {
-            if (arr[i][j] isnot EmptySlot) {
-            ++num;
-            }
+            (j == 0) ? printf("| "): 1;
+            printf("%d ", board[i][j]);
+            (j % 3 == 2) ? printf("| "): 1;
         }
+        printf("\n");
+        (i % 3 == 2) ? printf("------------------------\n"): 1;
     }
-    return num;
-}
-
-int *MemoryManage_1D(int size) {
-    /* Memory manage 1-Dimension Array */
-    int *arr;
-    arr = malloc(size * sizeof(int));
-    for (int i = 0; i < size; ++i) {
-        arr[i] = 0;
-    }
-    return arr;
-}
-
-int **MemoryManage_2D(int size_r, int size_c) {
-    /* Memory manage 2-Dimension Array */
-    int **arr;
-    arr = malloc(size_r * sizeof(int *));
-    for (int i = 0; i < size_r; ++i) {
-        arr[i] = malloc(size_c * sizeof(int ));
-        for (int j = 0; j < size_c; ++j) {
-            arr[i][j] = 0;
-        }
-    }
-    return arr;
 }

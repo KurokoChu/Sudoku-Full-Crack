@@ -33,8 +33,12 @@ int FullHouse_Row(int **board, int row, int col) {
     if (count is 8) {
         for (int i = 0; i < 9; ++i) {
             if (fill_arr[i] is EmptySlot) {
-                board[row][col] = i + 1;
-                return True;
+                coord.x = row;
+                coord.y = col;
+                if (CanFillIn(i + 1, board, 9, 9) is True) {
+                    board[row][col] = i +1;
+                    return True;
+                }
             }
         }
     }
@@ -52,9 +56,13 @@ int FullHouse_Col(int **board, int row, int col) {
     }
     if (count is 8) {
         for (int i = 0; i < 9; ++i) {
+            coord.x = row;
+            coord.y = col;
             if (fill_arr[i] is EmptySlot) {
-                board[row][col] = i + 1;
-                return True;
+                if (CanFillIn(i + 1, board, 9, 9) is True) {
+                    board[row][col] = i +1;
+                    return True;
+                }
             }
         }
     }
@@ -76,8 +84,12 @@ int FullHouse_Sub(int **board, int row, int col) {
     if (count is 8) {
         for (int i = 0; i < 9; ++i) {
             if (fill_arr[i] is EmptySlot) {
-                board[row][col] = i + 1;
-                return True;
+                coord.x = row;
+                coord.y = col;
+                if (CanFillIn(i + 1, board, 9, 9) is True) {
+                    board[row][col] = i + 1;
+                    return True;
+                }
             }
         }
     }
@@ -88,8 +100,12 @@ int Find_NakedSingle(int **board, int row, int col) {
     if (cell[row][col].num is 1) {
         for (int i = 0; i < 9; ++i) {
             if (cell[row][col].arr[i] isnot EmptySlot) {
-                board[row][col] = cell[row][col].arr[i];
-                    return True;
+                coord.x = row;
+                coord.y = col;
+                if (CanFillIn(cell[row][col].arr[i], board, 9, 9) is True) {
+                    board[row][col] = cell[row][col].arr[i];
+                        return True;
+                }
             }
         }
     }

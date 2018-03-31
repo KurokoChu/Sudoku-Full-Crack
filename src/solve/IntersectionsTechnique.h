@@ -1,7 +1,3 @@
-typedef struct {
-    int x1, y1, x2, y2, x3, y3, *arr, num;
-} point2;
-point2 coord_pair;
 
 int Find_LockedPair(int **board, int row, int col);
 void Block_LockedPair(int **board, int row_block, int col_block);
@@ -12,6 +8,14 @@ void Block_LockedSub(int **board, int num, int row_block, int col_block);
 int Find_LockedCandidates_2(int **board, int row, int col);
 int Count_SameDigit_Row(int **board, int index, int row, int col);
 int Count_SameDigit_Col(int **board, int index, int row, int col);
+int Find_LockedTriple(int **board, int row, int col);
+int Row_LockedTriple(int **board, int row, int col);
+int Col_LockedTriple(int **board, int row, int col);
+int *Row_LockedElement(int **board, int row, int col);
+int *Col_LockedElement(int **board, int row, int col);
+void Block_LockedRow2(int **board, int *num_arr, int row_block, int col_block);
+void Block_LockedCol2(int **board, int *num_arr, int row_block, int col_block);
+void Block_LockedSub2(int **board, int *num_arr, int row_block, int col_block);
 
 int Find_LockedPair(int **board, int row, int col) {
     if (cell[row][col].num isnot 2) {
@@ -37,7 +41,6 @@ int Find_LockedPair(int **board, int row, int col) {
                         if (eliminated is True) {
                             return True;
                         }
-                        return True;
                     }
                 }
             }
@@ -53,9 +56,10 @@ void Block_LockedPair(int **board, int row_block, int col_block) {
                 if (i isnot coord_pair.y1 && i isnot coord_pair.y2) {
                     for (int j = 0; j < 9; ++j) {
                         if (cell[row_block][col_block].arr[j] isnot EmptySlot) {
-                            Eliminate_Digit(board, cell[row_block][col_block].arr[j], row_block, i);
+                            Eliminate_Digit(board, j + 1, row_block, i);
                         }
                     }
+                    Update_Board(board, row_block, i);
                 }
             }
         }
@@ -66,9 +70,10 @@ void Block_LockedPair(int **board, int row_block, int col_block) {
                 if (i isnot coord_pair.x1 && i isnot coord_pair.x2) {
                     for (int j = 0; j < 9; ++j) {
                         if (cell[row_block][col_block].arr[j] isnot EmptySlot) {
-                            Eliminate_Digit(board, cell[row_block][col_block].arr[j], i, col_block);
+                            Eliminate_Digit(board, j + 1, i, col_block);
                         }
                     }
+                    Update_Board(board, i, col_block);
                 }
             }
         }
@@ -83,6 +88,7 @@ void Block_LockedPair(int **board, int row_block, int col_block) {
                             Eliminate_Digit(board, cell[row_block][col_block].arr[k], i, j);
                         }
                     }
+                    Update_Board(board, i, j);
                 }
             }
         }
@@ -260,4 +266,200 @@ int Count_SameDigit_Col(int **board, int index, int row, int col) {
         return True;
     }
     return False;
+}
+
+int Find_LockedTriple(int **board, int row, int col) {
+    if (cell[row][col].num isnot 3 && cell[row][col].num isnot 2) {
+        return False;
+    }
+    if (Row_LockedTriple(board, row, col) is True || Col_LockedTriple(board, row, col) is True) {
+        return True;
+    }
+    return False;
+}
+
+int Row_LockedTriple(int **board, int row, int col) {
+    coord_pair.x1 = -1;
+    coord_pair.y1 = -1;
+    coord_pair.x2 = -1;
+    coord_pair.y2 = -1;
+    coord_pair.x3 = -1;
+    coord_pair.y3 = -1;
+    int *num_arr, count_digit = 0;
+    num_arr = MemoryManage_1D(9);
+    num_arr = Row_LockedElement(board, row, col);
+    if (num_arr[0] is -1) {
+        return False;
+    }
+    for (int i = 0; i < 9; ++i) {
+        if (num_arr[i] isnot EmptySlot) {
+            ++count_digit;
+        }
+    }
+    if (count_digit > 3) {
+        return False;
+    }
+
+    if (coord_pair.x2 is row && coord_pair.x3 is row) {
+        Block_LockedRow2(board, num_arr, row, col);
+        Block_LockedSub2(board, num_arr, row, col);
+        if (eliminated is True) {
+            return True;
+        }
+    }
+    return False;
+}
+
+int Col_LockedTriple(int **board, int row, int col) {
+    coord_pair.x1 = -1;
+    coord_pair.y1 = -1;
+    coord_pair.x2 = -1;
+    coord_pair.y2 = -1;
+    coord_pair.x3 = -1;
+    coord_pair.y3 = -1;
+    int *num_arr, count_digit = 0;
+    num_arr = MemoryManage_1D(9);
+    num_arr = Col_LockedElement(board, row, col);
+    if (num_arr[0] is -1) {
+        return False;
+    }
+    for (int i = 0; i < 9; ++i) {
+        if (num_arr[i] isnot EmptySlot) {
+            ++count_digit;
+        }
+    }
+    if (count_digit > 3) {
+        return False;
+    }
+    if (coord_pair.y2 is col && coord_pair.y3 is col) {
+        Block_LockedCol2(board, num_arr, row, col);
+        Block_LockedSub2(board, num_arr, row, col);
+        if (eliminated is True) {
+            return True;
+        }
+    }
+    return False;
+}
+
+int *Row_LockedElement(int **board, int row, int col) {
+    int count_empty = 0, *count_elem, sub_y = col - (col % 3);
+    count_elem = MemoryManage_1D(9);
+    triple.arr = MemoryManage_1D(9);
+    for (int i = sub_y; i < sub_y + 3; ++i) {
+        if (board[row][i] is EmptySlot && (cell[row][col].num is 2 || cell[row][col].num is 3)) {
+            ++count_empty;
+            if (coord_pair.x1 is -1 && coord_pair.y1 is -1) {
+                coord_pair.x1 = row;
+                coord_pair.y1 = i;
+            }
+            else if (coord_pair.x2 is -1 && coord_pair.y2 is -1) {
+                coord_pair.x2 = row;
+                coord_pair.y2 = i;
+            }
+            else if (coord_pair.x3 is -1 && coord_pair.y3 is -1) {
+                coord_pair.x3 = row;
+                coord_pair.y3 = i;
+            }
+        }
+    }
+    if (count_empty isnot 3) {
+        count_elem[0] = -1;
+        return count_elem;
+    }
+    for (int i = coord_pair.y1; i < coord_pair.y1 + 3; ++i) {
+        for (int j = 0; j < 9; ++j) {
+            if (cell[row][i].arr[j] isnot EmptySlot) {
+                ++count_elem[j];
+                triple.arr[j] = j + 1;
+            }
+        }
+    }
+    return count_elem;
+}
+
+int *Col_LockedElement(int **board, int row, int col) {
+    int count_empty = 0, *count_elem, sub_x = row - (row % 3);
+    count_elem = MemoryManage_1D(9);
+    triple.arr = MemoryManage_1D(9);
+    for (int i = sub_x; i < sub_x + 3; ++i) {
+        if (board[i][col] is EmptySlot && (cell[row][col].num is 2 || cell[row][col].num is 3)) {
+            ++count_empty;
+            if (coord_pair.x1 is -1 && coord_pair.y1 is -1) {
+                coord_pair.x1 = i;
+                coord_pair.y1 = col;
+            }
+            else if (coord_pair.x2 is -1 && coord_pair.y2 is -1) {
+                coord_pair.x2 = i;
+                coord_pair.y2 = col;
+            }
+            else if (coord_pair.x3 is -1 && coord_pair.y3 is -1) {
+                coord_pair.x3 = i;
+                coord_pair.y3 = col;
+            }
+        }
+    }
+
+    if (count_empty isnot 3) {
+        count_elem[0] = -1;
+        return count_elem;
+    }
+    for (int i = coord_pair.x1; i < coord_pair.x1 + 3; ++i) {
+        for (int j = 0; j < 9; ++j) {
+            if (cell[i][col].arr[j] isnot EmptySlot) {
+                ++count_elem[j];
+                triple.arr[j] = j + 1;
+            }
+        }
+    }
+    return count_elem;
+}
+
+void Block_LockedRow2(int **board, int *num_arr, int row_block, int col_block) {
+    for (int i = 0; i < 9; ++i) {
+        if (board[row_block][i] is EmptySlot) {
+            if (i isnot coord_pair.y1 && i isnot coord_pair.y2 && i isnot coord_pair.y3) {
+                for (int j = 0; j < 9; ++j) {
+                    if (num_arr[j] isnot EmptySlot) {
+                        Eliminate_Digit(board, j + 1, row_block, i);
+                    }
+                }
+                Update_Board(board, row_block, i);
+            }
+        }
+    }
+}
+
+void Block_LockedCol2(int **board, int *num_arr, int row_block, int col_block) {
+    for (int i = 0; i < 9; ++i) {
+        if (board[i][col_block] is EmptySlot) {
+            if (i isnot coord_pair.x1 && i isnot coord_pair.x2 && i isnot coord_pair.x3) {
+                for (int j = 0; j < 9; ++j) {
+                    if (num_arr[j] isnot EmptySlot) {
+                        Eliminate_Digit(board, j + 1, i, col_block);
+                    }
+                }
+                Update_Board(board, i, col_block);
+            }
+        }
+    }
+}
+
+void Block_LockedSub2(int **board, int *num_arr, int row_block, int col_block) {
+    int sub_x = row_block - (row_block % 3), sub_y = col_block - (col_block % 3);
+    for (int i = sub_x; i < sub_x + 3; ++i) {
+        for (int j = sub_y; j < sub_y + 3; ++j) {
+            if (board[i][j] is EmptySlot) {
+                if ((i isnot coord_pair.x1 && j isnot coord_pair.y1) 
+                    || (i isnot coord_pair.x2 && j isnot coord_pair.y2)
+                    || (i isnot coord_pair.x3 && j isnot coord_pair.y3)) {
+                    for (int k = 0; k < 9; ++k) {
+                        if (num_arr[k] isnot EmptySlot) {
+                            Eliminate_Digit(board, k + 1, i, j);
+                        }
+                    }
+                    Update_Board(board, i, j);
+                }
+            }
+        }
+    }
 }

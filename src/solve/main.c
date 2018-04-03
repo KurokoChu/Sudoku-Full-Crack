@@ -5,6 +5,7 @@
 #include "test.h"
 #include "SinglesTechnique.h"
 #include "IntersectionsTechnique.h"
+#include "SubsetsTechnique.h"
 
 void Score_Summary();
 int Solve_Board(int **board, int row, int col);
@@ -55,7 +56,7 @@ int Solve_Board(int **board, int row, int col) {
 }
 
 int GetStep(int **board, int step) {
-    if (step > 8) {
+    if (step > 9) {
         return False;
     }
     for (int i = 0; i < 9; ++i) {
@@ -147,6 +148,17 @@ int DoStep(int **board, int row, int col, int step) {
                 return True;
             }
             break;
+        case 8:
+            if (Find_NakedPair(board, row, col) is True) {
+                (score[7].num is False) ? score[7].num = True: 1;
+                score[7].arr[0]++;
+                printf("Naked Pair : [ ");
+                Show_ArrayElement_1D(cell[row][col].arr, 9);
+                printf("] in r%dc%d and r%dc%d\n", coord_pair.x1 + 1, coord_pair.y1 + 1, 
+                                                   coord_pair.x2 + 1, coord_pair.y2 + 1);
+                return True;
+            }
+            break;
         default: return False;
     }
 }
@@ -187,6 +199,11 @@ void Score_Summary() {
         is_score = True;
         printf("%d Locked Candidates Type 2 \"Claiming\" (%d)\n", score[6].arr[0], score[6].arr[0] * 50);
         count += score[6].arr[0] * 50;
+    }
+    if (score[7].num is True) {
+        is_score = True;
+        printf("%d Naked Pair (%d)\n", score[7].arr[0], score[7].arr[0] * 60);
+        count += score[7].arr[0] * 60;
     }
 
     if (is_score is True) {

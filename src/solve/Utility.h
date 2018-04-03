@@ -21,7 +21,7 @@ typedef struct{
     int *arr;
     int num;
 } sudo2;
-sudo2 score[5];
+sudo2 score[8];
 sudo2 triple;
 sudo2 filled[27];
 
@@ -53,7 +53,7 @@ void Setup() {
             lock_can1[i][j].arr = MemoryManage_1D(1);
         }
     }
-    for (int i = 0; i < 7; ++i) {
+    for (int i = 0; i < 8; ++i) {
         score[i].num = False;
         score[i].arr = MemoryManage_1D(1);
     }

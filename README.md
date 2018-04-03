@@ -9,8 +9,8 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 * [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)
 
 ## Author
-* 60070099 : Supakit Rodthong
 * 60070088 : Wassapol Pungjap
+* 60070099 : Supakit Rodthong
 ---
 
 Faculty of Information Technology

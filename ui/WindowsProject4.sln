@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 15 for Windows Desktop
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsProject4", "..\..\source\repos\WindowsProject4\WindowsProject4\WindowsProject4.vcxproj", "{A01C8D16-33EF-4E07-B265-58333DD1F531}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WindowsProject4", "WindowsProject4\WindowsProject4.vcxproj", "{A01C8D16-33EF-4E07-B265-58333DD1F531}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

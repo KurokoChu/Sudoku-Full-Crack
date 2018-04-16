@@ -1,6 +1,5 @@
 
 int Find_LockedPair(int **board, int row, int col);
-void Block_LockedPair(int **board, int row_block, int col_block);
 int Find_LockedCandidates_1(int **board, int row, int col);
 void Block_LockedRow(int **board, int num, int row_block, int col_block);
 void Block_LockedCol(int **board, int num, int row_block, int col_block);
@@ -16,6 +15,9 @@ int *Col_LockedElement(int **board, int row, int col);
 void Block_LockedRow2(int **board, int *num_arr, int row_block, int col_block);
 void Block_LockedCol2(int **board, int *num_arr, int row_block, int col_block);
 void Block_LockedSub2(int **board, int *num_arr, int row_block, int col_block);
+void Block_RowTriple(int **board, int num, int row_block, int col_block);
+void Block_ColTriple(int **board, int num, int row_block, int col_block);
+void Block_SubTriple(int **board, int num, int row_block, int col_block);
 
 int Find_LockedPair(int **board, int row, int col) {
     if (cell[row][col].num isnot 2) {
@@ -36,63 +38,35 @@ int Find_LockedPair(int **board, int row, int col) {
                         coord_pair.y1 = col;
                         coord_pair.x2 = i;
                         coord_pair.y2 = j;
-                        Block_LockedPair(board, row, col);
-                        Block_LockedPair(board, i, j);
+                        for (int num = 0; num < 9; ++num) {
+                            if (cell[row][col].arr[num] isnot EmptySlot) {
+                                Block_LockedSub(board, num + 1, row, col); 
+                            }
+                        }
+                        if (row is i) {
+                            for (int num = 0; num < 9; ++num) {
+                                if (cell[row][col].arr[num] isnot EmptySlot) {
+                                    Block_LockedRow(board, num + 1, row, col); 
+                                }
+                            }
+                        }
+                        else {
+                            for (int num = 0; num < 9; ++num) {
+                                if (cell[row][col].arr[num] isnot EmptySlot) {
+                                    Block_LockedCol(board, num + 1, row, col); 
+                                }
+                            }
+                        }
                         if (eliminated is True) {
                             return True;
                         }
+                        return False;
                     }
                 }
             }
         }
     }
     return False;
-}
-
-void Block_LockedPair(int **board, int row_block, int col_block) {
-    if (coord_pair.x1 is coord_pair.x2) {
-        for (int i = 0; i < 9; ++i) {
-            if (board[row_block][i] is EmptySlot) {
-                if (i isnot coord_pair.y1 && i isnot coord_pair.y2) {
-                    for (int j = 0; j < 9; ++j) {
-                        if (cell[row_block][col_block].arr[j] isnot EmptySlot) {
-                            Eliminate_Digit(board, j + 1, row_block, i);
-                        }
-                    }
-                    Update_Board(board, row_block, i);
-                }
-            }
-        }
-    }
-    else if (coord_pair.y1 is coord_pair.y2) {
-        for (int i = 0; i < 9; ++i) {
-            if (board[i][col_block] is EmptySlot) {
-                if (i isnot coord_pair.x1 && i isnot coord_pair.x2) {
-                    for (int j = 0; j < 9; ++j) {
-                        if (cell[row_block][col_block].arr[j] isnot EmptySlot) {
-                            Eliminate_Digit(board, j + 1, i, col_block);
-                        }
-                    }
-                    Update_Board(board, i, col_block);
-                }
-            }
-        }
-    }
-    int sub_x = row_block - (row_block % 3), sub_y = col_block - (col_block % 3);
-    for (int i = sub_x; i < sub_x + 3; ++i) {
-        for (int j = sub_y; j < sub_y + 3; ++j) {
-            if (board[i][j] is EmptySlot) {
-                if ((i isnot coord_pair.x1 && j isnot coord_pair.y1) || (i isnot coord_pair.x2 && j isnot coord_pair.y2)) {
-                    for (int k = 0; k < 9; ++k) {
-                        if (cell[row_block][col_block].arr[k] isnot EmptySlot) {
-                            Eliminate_Digit(board, cell[row_block][col_block].arr[k], i, j);
-                        }
-                    }
-                    Update_Board(board, i, j);
-                }
-            }
-        }
-    }
 }
 
 int Find_LockedCandidates_1(int **board, int row, int col) {
@@ -165,16 +139,24 @@ void Block_LockedSub(int **board, int num, int row_block, int col_block) {
     for (int i = sub_x; i < sub_x + 3; ++i) {
         for (int j = sub_y; j < sub_y + 3; ++j) {
             if (board[i][j] is EmptySlot) {
-                if ((i isnot coord_pair.x1 && j isnot coord_pair.y1) || (i isnot coord_pair.x2 && j isnot coord_pair.y2)) {
-                    Eliminate_Digit(board, num, i, j);
-                    Update_Board(board, i, j);
+                if ((i is coord_pair.x1 && j is coord_pair.y1) ||
+                    (i is coord_pair.x2 && j is coord_pair.y2)) {
+                    continue;
                 }
+                Eliminate_Digit(board, num, i, j);
+                Update_Board(board, i, j);
             }
         }
     }
 }
 
 int Find_LockedCandidates_2(int **board, int row, int col) {
+    coord_pair.x1 = -1;
+    coord_pair.y1 = -1;
+    coord_pair.x2 = -1;
+    coord_pair.y2 = -1;
+    coord_pair.x3 = -1;
+    coord_pair.y3 = -1;
     for (int i = 0; i < 9; ++i) {
         if (cell[row][col].arr[i] isnot EmptySlot) {
             coord_pair.x1 = row;
@@ -182,16 +164,10 @@ int Find_LockedCandidates_2(int **board, int row, int col) {
             coord_pair.num = 1;
             coord_pair.arr[0] = i + 1;
             if (Count_SameDigit_Row(board, i, row, col) is True) {
-                Block_LockedSub(board, cell[row][col].arr[i], row, col);
-                if (eliminated is True) {
-                    return True;
-                }
+                return True;
             }
             if (Count_SameDigit_Col(board, i, row, col) is True) {
-                Block_LockedSub(board, cell[row][col].arr[i], row, col);
-                if (eliminated is True) {
-                    return True;
-                }
+                return True;
             }
         }
     }
@@ -220,7 +196,11 @@ int Count_SameDigit_Row(int **board, int index, int row, int col) {
         && (coord_pair.x2 - (coord_pair.x2 % 3) is row - (row % 3))
         && (coord_pair.y2 - (coord_pair.y2 % 3) is col - (col % 3))) {
         coord_pair.num = 1;
-        return True;
+        Block_LockedSub(board, cell[row][col].arr[index], row, col);
+        if (eliminated is True) {
+            return True;
+        }
+        return False;
     }
     else if (count is 2
         && (coord_pair.x2 - (coord_pair.x2 % 3) is row - (row % 3))
@@ -228,7 +208,11 @@ int Count_SameDigit_Row(int **board, int index, int row, int col) {
         && (coord_pair.x3 - (coord_pair.x3 % 3) is row - (row % 3))
         && (coord_pair.y3 - (coord_pair.y3 % 3) is col - (col % 3))) {
         coord_pair.num = 2;
-        return True;
+        Block_SubTriple(board, cell[row][col].arr[index], row, col);
+        if (eliminated is True) {
+            return True;
+        }
+        return False;
     }
     return False;
 }
@@ -255,7 +239,11 @@ int Count_SameDigit_Col(int **board, int index, int row, int col) {
         && (coord_pair.x2 - (coord_pair.x2 % 3) is row - (row % 3))
         && (coord_pair.y2 - (coord_pair.y2 % 3) is col - (col % 3))) {
         coord_pair.num = 1;
-        return True;
+        Block_LockedSub(board, cell[row][col].arr[index], row, col);
+        if (eliminated is True) {
+            return True;
+        }
+        return False;
     }
     else if (count is 2
         && (coord_pair.x2 - (coord_pair.x2 % 3) is row - (row % 3))
@@ -263,7 +251,11 @@ int Count_SameDigit_Col(int **board, int index, int row, int col) {
         && (coord_pair.x3 - (coord_pair.x3 % 3) is row - (row % 3))
         && (coord_pair.y3 - (coord_pair.y3 % 3) is col - (col % 3))) {
         coord_pair.num = 2;
-        return True;
+        Block_SubTriple(board, cell[row][col].arr[index], row, col);
+        if (eliminated is True) {
+            return True;
+        }
+        return False;
     }
     return False;
 }
@@ -449,16 +441,60 @@ void Block_LockedSub2(int **board, int *num_arr, int row_block, int col_block) {
     for (int i = sub_x; i < sub_x + 3; ++i) {
         for (int j = sub_y; j < sub_y + 3; ++j) {
             if (board[i][j] is EmptySlot) {
-                if ((i isnot coord_pair.x1 && j isnot coord_pair.y1) 
-                    || (i isnot coord_pair.x2 && j isnot coord_pair.y2)
-                    || (i isnot coord_pair.x3 && j isnot coord_pair.y3)) {
-                    for (int k = 0; k < 9; ++k) {
-                        if (num_arr[k] isnot EmptySlot) {
-                            Eliminate_Digit(board, k + 1, i, j);
-                        }
-                    }
-                    Update_Board(board, i, j);
+                if ((i is coord_pair.x1 && j is coord_pair.y1) || 
+                    (i is coord_pair.x2 && j is coord_pair.y2) || 
+                    (i is coord_pair.x3 && j is coord_pair.y3)) {
+                    continue;
                 }
+                for (int k = 0; k < 9; ++k) {
+                    if (num_arr[k] isnot EmptySlot) {
+                        Eliminate_Digit(board, k + 1, i, j);
+                    }
+                }
+                Update_Board(board, i, j);
+            }
+        }
+    }
+}
+
+void Block_RowTriple(int **board, int num, int row_block, int col_block) {
+    for (int i = 0; i < 9; ++i) {
+        if (board[row_block][i] is EmptySlot) {
+            if (i isnot coord_pair.y1 && 
+                i isnot coord_pair.y2 &&
+                i isnot coord_pair.y3) {
+                Eliminate_Digit(board, num, row_block, i);
+                Update_Board(board, row_block, i);
+            }
+        }
+    }
+}
+
+void Block_ColTriple(int **board, int num, int row_block, int col_block) {
+    for (int i = 0; i < 9; ++i) {
+        if (board[i][col_block] is EmptySlot) {
+            if (i isnot coord_pair.x1 && 
+                i isnot coord_pair.x2 &&
+                i isnot coord_pair.x3) {
+                Eliminate_Digit(board, num, i, col_block);
+                Update_Board(board, i, col_block);
+            }
+        }
+    }
+}
+
+void Block_SubTriple(int **board, int num, int row_block, int col_block) {
+    int sub_x = row_block - (row_block % 3), sub_y = col_block - (col_block % 3);
+    for (int i = sub_x; i < sub_x + 3; ++i) {
+        for (int j = sub_y; j < sub_y + 3; ++j) {
+            if (board[i][j] is EmptySlot) {
+                if ((i is coord_pair.x1 && j is coord_pair.y1) ||
+                    (i is coord_pair.x2 && j is coord_pair.y2) ||
+                    (i is coord_pair.x3 && j is coord_pair.y3)) {
+                    continue;
+                }
+                Eliminate_Digit(board, num, i, j);
+                Update_Board(board, i, j);
             }
         }
     }

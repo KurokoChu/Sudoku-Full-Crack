@@ -53,7 +53,7 @@ void Setup() {
             lock_can1[i][j].arr = MemoryManage_1D(1);
         }
     }
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 10; ++i) {
         score[i].num = False;
         score[i].arr = MemoryManage_1D(1);
     }

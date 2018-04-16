@@ -56,7 +56,7 @@ int Solve_Board(int **board, int row, int col) {
 }
 
 int GetStep(int **board, int step) {
-    if (step > 9) {
+    if (step > 10) {
         return False;
     }
     for (int i = 0; i < 9; ++i) {
@@ -153,7 +153,30 @@ int DoStep(int **board, int row, int col, int step) {
                 (score[7].num is False) ? score[7].num = True: 1;
                 score[7].arr[0]++;
                 printf("Naked Pair : [ ");
-                Show_ArrayElement_1D(cell[row][col].arr, 9);
+                Show_ArrayElement_1D(coord_pair.arr, 9);
+                printf("] in r%dc%d and r%dc%d\n", coord_pair.x1 + 1, coord_pair.y1 + 1, 
+                                                   coord_pair.x2 + 1, coord_pair.y2 + 1);
+                return True;
+            }
+            break;
+        case 9:
+            if (Find_NakedTriple(board, row, col) is True) {
+                (score[8].num is False) ? score[8].num = True: 1;
+                score[8].arr[0]++;
+                printf("Naked Triple : [ ");
+                Show_ArrayElement_1D(coord_pair.arr, 9);
+                printf("] in r%dc%d, r%dc%d and r%dc%d\n", coord_pair.x1 + 1, coord_pair.y1 + 1, 
+                                                           coord_pair.x2 + 1, coord_pair.y2 + 1,
+                                                           coord_pair.x3 + 1, coord_pair.y3 + 1);
+                return True;
+            }
+            break;
+        case 10:
+            if (Find_HiddenPair(board, row, col) is True) {
+                (score[9].num is False) ? score[9].num = True: 1;
+                score[9].arr[0]++;
+                printf("Hidden Pair : [ ");
+                Show_ArrayElement_1D(coord_pair.arr, 9);
                 printf("] in r%dc%d and r%dc%d\n", coord_pair.x1 + 1, coord_pair.y1 + 1, 
                                                    coord_pair.x2 + 1, coord_pair.y2 + 1);
                 return True;
@@ -204,6 +227,16 @@ void Score_Summary() {
         is_score = True;
         printf("%d Naked Pair (%d)\n", score[7].arr[0], score[7].arr[0] * 60);
         count += score[7].arr[0] * 60;
+    }
+    if (score[8].num is True) {
+        is_score = True;
+        printf("%d Naked Triple (%d)\n", score[8].arr[0], score[8].arr[0] * 80);
+        count += score[8].arr[0] * 80;
+    }
+    if (score[9].num is True) {
+        is_score = True;
+        printf("%d Hidden Pair (%d)\n", score[9].arr[0], score[9].arr[0] * 70);
+        count += score[9].arr[0] * 70;
     }
 
     if (is_score is True) {

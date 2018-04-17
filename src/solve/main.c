@@ -56,7 +56,7 @@ int Solve_Board(int **board, int row, int col) {
 }
 
 int GetStep(int **board, int step) {
-    if (step > 10) {
+    if (step > 11) {
         return False;
     }
     for (int i = 0; i < 9; ++i) {
@@ -182,6 +182,18 @@ int DoStep(int **board, int row, int col, int step) {
                 return True;
             }
             break;
+        case 11:
+            if (Find_HiddenTriple(board, row, col) is True) {
+                (score[10].num is False) ? score[10].num = True: 1;
+                score[10].arr[0]++;
+                printf("Hidden Triple : [ ");
+                Show_ArrayElement_1D(coord_pair.arr, 9);
+                printf("] in r%dc%d, r%dc%d and r%dc%d\n", coord_pair.x1 + 1, coord_pair.y1 + 1, 
+                                                           coord_pair.x2 + 1, coord_pair.y2 + 1,
+                                                           coord_pair.x3 + 1, coord_pair.y3 + 1);
+                return True;
+            }
+            break;
         default: return False;
     }
 }
@@ -237,6 +249,11 @@ void Score_Summary() {
         is_score = True;
         printf("%d Hidden Pair (%d)\n", score[9].arr[0], score[9].arr[0] * 70);
         count += score[9].arr[0] * 70;
+    }
+    if (score[10].num is True) {
+        is_score = True;
+        printf("%d Hidden Triple (%d)\n", score[10].arr[0], score[10].arr[0] * 100);
+        count += score[10].arr[0] * 100;
     }
 
     if (is_score is True) {

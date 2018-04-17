@@ -1,4 +1,3 @@
-
 int Find_LockedPair(int **board, int row, int col);
 int Find_LockedCandidates_1(int **board, int row, int col);
 void Block_LockedRow(int **board, int num, int row_block, int col_block);
@@ -12,9 +11,6 @@ int Row_LockedTriple(int **board, int row, int col);
 int Col_LockedTriple(int **board, int row, int col);
 int *Row_LockedElement(int **board, int row, int col);
 int *Col_LockedElement(int **board, int row, int col);
-void Block_LockedRow2(int **board, int *num_arr, int row_block, int col_block);
-void Block_LockedCol2(int **board, int *num_arr, int row_block, int col_block);
-void Block_LockedSub2(int **board, int *num_arr, int row_block, int col_block);
 void Block_RowTriple(int **board, int num, int row_block, int col_block);
 void Block_ColTriple(int **board, int num, int row_block, int col_block);
 void Block_SubTriple(int **board, int num, int row_block, int col_block);
@@ -264,7 +260,10 @@ int Find_LockedTriple(int **board, int row, int col) {
     if (cell[row][col].num isnot 3 && cell[row][col].num isnot 2) {
         return False;
     }
-    if (Row_LockedTriple(board, row, col) is True || Col_LockedTriple(board, row, col) is True) {
+    if (Row_LockedTriple(board, row, col) is True) {
+        return True;
+    }
+    else if (Col_LockedTriple(board, row, col) is True) {
         return True;
     }
     return False;
@@ -293,8 +292,12 @@ int Row_LockedTriple(int **board, int row, int col) {
     }
 
     if (coord_pair.x2 is row && coord_pair.x3 is row) {
-        Block_LockedRow2(board, num_arr, row, col);
-        Block_LockedSub2(board, num_arr, row, col);
+        for (int num = 0; num < 9; ++num) {
+            if (num_arr[num] isnot EmptySlot) {
+                Block_RowTriple(board, num + 1, row, col);
+                Block_SubTriple(board, num + 1, row, col);
+            }
+        }
         if (eliminated is True) {
             return True;
         }
@@ -324,8 +327,12 @@ int Col_LockedTriple(int **board, int row, int col) {
         return False;
     }
     if (coord_pair.y2 is col && coord_pair.y3 is col) {
-        Block_LockedCol2(board, num_arr, row, col);
-        Block_LockedSub2(board, num_arr, row, col);
+        for (int num = 0; num < 9; ++num) {
+            if (num_arr[num] isnot EmptySlot) {
+                Block_ColTriple(board, num + 1, row, col);
+                Block_SubTriple(board, num + 1, row, col);
+            }
+        }
         if (eliminated is True) {
             return True;
         }
@@ -404,57 +411,6 @@ int *Col_LockedElement(int **board, int row, int col) {
         }
     }
     return count_elem;
-}
-
-void Block_LockedRow2(int **board, int *num_arr, int row_block, int col_block) {
-    for (int i = 0; i < 9; ++i) {
-        if (board[row_block][i] is EmptySlot) {
-            if (i isnot coord_pair.y1 && i isnot coord_pair.y2 && i isnot coord_pair.y3) {
-                for (int j = 0; j < 9; ++j) {
-                    if (num_arr[j] isnot EmptySlot) {
-                        Eliminate_Digit(board, j + 1, row_block, i);
-                    }
-                }
-                Update_Board(board, row_block, i);
-            }
-        }
-    }
-}
-
-void Block_LockedCol2(int **board, int *num_arr, int row_block, int col_block) {
-    for (int i = 0; i < 9; ++i) {
-        if (board[i][col_block] is EmptySlot) {
-            if (i isnot coord_pair.x1 && i isnot coord_pair.x2 && i isnot coord_pair.x3) {
-                for (int j = 0; j < 9; ++j) {
-                    if (num_arr[j] isnot EmptySlot) {
-                        Eliminate_Digit(board, j + 1, i, col_block);
-                    }
-                }
-                Update_Board(board, i, col_block);
-            }
-        }
-    }
-}
-
-void Block_LockedSub2(int **board, int *num_arr, int row_block, int col_block) {
-    int sub_x = row_block - (row_block % 3), sub_y = col_block - (col_block % 3);
-    for (int i = sub_x; i < sub_x + 3; ++i) {
-        for (int j = sub_y; j < sub_y + 3; ++j) {
-            if (board[i][j] is EmptySlot) {
-                if ((i is coord_pair.x1 && j is coord_pair.y1) || 
-                    (i is coord_pair.x2 && j is coord_pair.y2) || 
-                    (i is coord_pair.x3 && j is coord_pair.y3)) {
-                    continue;
-                }
-                for (int k = 0; k < 9; ++k) {
-                    if (num_arr[k] isnot EmptySlot) {
-                        Eliminate_Digit(board, k + 1, i, j);
-                    }
-                }
-                Update_Board(board, i, j);
-            }
-        }
-    }
 }
 
 void Block_RowTriple(int **board, int num, int row_block, int col_block) {

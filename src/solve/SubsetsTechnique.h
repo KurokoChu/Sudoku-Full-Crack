@@ -6,6 +6,8 @@ int Sub_NakedTriple(int **board, int row, int col);
 int Find_HiddenPair(int **board, int row, int col);
 int Row_HiddenPair(int **board, int row, int col);
 int Col_HiddenPair(int **board, int row, int col);
+int Find_HiddenTriple(int **board, int row, int col);
+int Col_HiddenTriple(int **board, int row, int col);
 
 int Find_NakedPair(int **board, int row, int col) {
     if (cell[row][col].num isnot 2) {
@@ -307,6 +309,9 @@ int Row_HiddenPair(int **board, int row, int col) {
         }
         count = 0;
         for (int i = 0; i < 9; ++i) {
+            if (board[row][i] isnot EmptySlot) {
+                continue;
+            }
             if (num_arr[0] is cell[row][i].arr[num_arr[0] - 1] && num_arr[1] is cell[row][i].arr[num_arr[1] - 1]) {
                 ++count;
                 if (coord_pair.x1 is -1 && coord_pair.y1 is -1) {
@@ -369,6 +374,9 @@ int Col_HiddenPair(int **board, int row, int col) {
         }
         count = 0;
         for (int i = 0; i < 9; ++i) {
+            if (board[i][col] isnot EmptySlot) {
+                continue;
+            }
             if (num_arr[0] is cell[i][col].arr[num_arr[0] - 1] && num_arr[1] is cell[i][col].arr[num_arr[1] - 1]) {
                 ++count;
                 if (coord_pair.x1 is -1 && coord_pair.y1 is -1) {
@@ -387,6 +395,90 @@ int Col_HiddenPair(int **board, int row, int col) {
         for (int num = 0; num < 9; ++num) {
             (coord_pair.arr[num] is EmptySlot) ? Eliminate_Digit(board, num + 1, coord_pair.x1, coord_pair.y1): 1;
             (coord_pair.arr[num] is EmptySlot) ? Eliminate_Digit(board, num + 1, coord_pair.x2, coord_pair.y2): 1;
+        }
+        if (eliminated is True) {
+            return True;
+        }
+    }
+
+    return False;
+}
+
+int Find_HiddenTriple(int **board, int row, int col) {
+    if (Col_HiddenTriple(board, row, col) is True) {
+        return True;
+    }
+    return False;
+}
+
+int Col_HiddenTriple(int **board, int row, int col) {
+    coord_pair.x1 = -1;
+    coord_pair.y1 = -1;
+    coord_pair.x2 = -1;
+    coord_pair.y2 = -1;
+    coord_pair.x3 = -1;
+    coord_pair.y3 = -1;
+    coord_pair.arr = MemoryManage_1D(9);
+    int count = 0, hidden_count = 0, *count_arr, *num_arr, num_count = 0;
+    count_arr = MemoryManage_1D(9);
+    num_arr = MemoryManage_1D(9);
+    for (int i = 0; i < 9; ++i) {
+        if (board[i][col] isnot EmptySlot) {
+            continue;
+        }
+        for (int j = 0; j < 9; ++j) {
+            if (cell[row][col].arr[j] isnot EmptySlot && cell[row][col].arr[j] is cell[i][col].arr[j]) {
+                ++count_arr[j];
+            }
+        }
+    }
+
+    for (int i = 0; i < 9; ++i) {
+        if (count_arr[i] is 2 || count_arr[i] is 3) {
+            ++count;
+            coord_pair.arr[i] = i + 1;
+        }
+    }
+    if (count is 3) {
+        for (int i = 0; i < 9; ++i) {
+            if (coord_pair.arr[i] isnot EmptySlot) {
+                num_arr[num_count++] = i + 1;
+            }
+        }
+        count = 0;
+        for (int i = 0; i < 9; ++i) {
+            if (board[i][col] isnot EmptySlot) {
+                continue;
+            }
+            hidden_count = 0;
+            for (int j = 0; j < 3; ++j) {
+                if (num_arr[j] is cell[i][col].arr[num_arr[j] - 1]) {
+                    ++hidden_count;
+                }
+            }
+            if (hidden_count is 2 || hidden_count is 3) {
+                ++count;
+                if (coord_pair.x1 is -1 && coord_pair.y1 is -1) {
+                    coord_pair.x1 = i;
+                    coord_pair.y1 = col;
+                }
+                else if (coord_pair.x2 is -1 && coord_pair.y2 is -1) {
+                    coord_pair.x2 = i;
+                    coord_pair.y2 = col;
+                }
+                else if (coord_pair.x3 is -1 && coord_pair.y3 is -1) {
+                    coord_pair.x3 = i;
+                    coord_pair.y3 = col;
+                }
+            }
+        }
+        if (count isnot 3) {
+            return False;
+        }
+        for (int num = 0; num < 9; ++num) {
+            (coord_pair.arr[num] is EmptySlot) ? Eliminate_Digit(board, num + 1, coord_pair.x1, coord_pair.y1): 1;
+            (coord_pair.arr[num] is EmptySlot) ? Eliminate_Digit(board, num + 1, coord_pair.x2, coord_pair.y2): 1;
+            (coord_pair.arr[num] is EmptySlot) ? Eliminate_Digit(board, num + 1, coord_pair.x3, coord_pair.y3): 1;
         }
         if (eliminated is True) {
             return True;

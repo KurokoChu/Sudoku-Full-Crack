@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Utility.h"
-#include "test.h"
+#include "Sudoku.h"
 #include "SinglesTechnique.h"
 #include "IntersectionsTechnique.h"
 #include "SubsetsTechnique.h"

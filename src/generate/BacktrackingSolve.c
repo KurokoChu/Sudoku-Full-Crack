@@ -62,13 +62,6 @@ int solve_board(int **board) {
     num_lst = determine_num(board);
     int len = possible_num;
     ++test;
-    printf("round %d\n possible number : ", test);
-    for (int i = 0; i < len; ++i) {
-        printf("%d ", num_lst[i]);
-    }
-    printf("\n");
-    show_board(board);
-    printf("\n");
     for (int i = 0; i < len; ++i) {
         ++test;
         board[row][col] = num_lst[i];
@@ -192,7 +185,7 @@ int **board_init() {
                      {0, 0, 0,   0, 0, 0,   0, 0, 0}};
     for (int i = 0; i < 9; ++i) {
         for (int j = 0; j < 9; ++j) {
-            scanf("%d", &board[i][j]);
+            scanf("%1d", &board[i][j]);
         }
     }
     return board;

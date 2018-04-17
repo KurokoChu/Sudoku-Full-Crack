@@ -33,7 +33,7 @@ typedef struct{
 point coord;
 
 typedef struct {
-    int x1, y1, x2, y2, x3, y3, *arr, num;
+    int x1, y1, x2, y2, x3, y3, x4, y4, *arr, num;
 } point2;
 point2 coord_pair;
 
@@ -53,7 +53,7 @@ void Setup() {
             lock_can1[i][j].arr = MemoryManage_1D(1);
         }
     }
-    for (int i = 0; i < 11; ++i) {
+    for (int i = 0; i < 12; ++i) {
         score[i].num = False;
         score[i].arr = MemoryManage_1D(1);
     }

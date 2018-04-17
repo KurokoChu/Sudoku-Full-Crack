@@ -6,11 +6,13 @@
 #include "SinglesTechnique.h"
 #include "IntersectionsTechnique.h"
 #include "SubsetsTechnique.h"
+#include "BasicFishTechnique.h"
 
 void Score_Summary();
 int Solve_Board(int **board, int row, int col);
 int GetStep(int **board, int step);
 int DoStep(int **board, int row, int col, int step);
+int FishStep(int **board, int row, int col, int step);
 
 int main() {
     /* Main function */
@@ -56,7 +58,7 @@ int Solve_Board(int **board, int row, int col) {
 }
 
 int GetStep(int **board, int step) {
-    if (step > 11) {
+    if (step > 12) {
         return False;
     }
     for (int i = 0; i < 9; ++i) {
@@ -194,8 +196,27 @@ int DoStep(int **board, int row, int col, int step) {
                 return True;
             }
             break;
+        default: return FishStep(board, row, col, 1);
+    }
+}
+
+int FishStep(int **board, int row, int col, int step) {
+    switch(step) {
+        case 1:
+            if (Find_XWing(board, row, col) is True) {
+                (score[11].num is False) ? score[11].num = True: 1;
+                score[11].arr[0]++;
+                printf("X-Wing : [ %d ] in r%dc%d, r%dc%d, r%dc%d and r%dc%d\n", coord_pair.arr[0],
+                                                                                 coord_pair.x1 + 1, coord_pair.y1 + 1, 
+                                                                                 coord_pair.x2 + 1, coord_pair.y2 + 1,
+                                                                                 coord_pair.x3 + 1, coord_pair.y3 + 1,
+                                                                                 coord_pair.x4 + 1, coord_pair.y4 + 1);
+                return True;
+            }
+            break;
         default: return False;
     }
+    return False;
 }
 
 void Score_Summary() {
@@ -254,6 +275,11 @@ void Score_Summary() {
         is_score = True;
         printf("%d Hidden Triple (%d)\n", score[10].arr[0], score[10].arr[0] * 100);
         count += score[10].arr[0] * 100;
+    }
+    if (score[11].num is True) {
+        is_score = True;
+        printf("%d X-Wing (%d)\n", score[11].arr[0], score[11].arr[0] * 140);
+        count += score[11].arr[0] * 140;
     }
 
     if (is_score is True) {

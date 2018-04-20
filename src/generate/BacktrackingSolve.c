@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 // #include <python.h>
 #define True 1
@@ -35,6 +36,9 @@ int main() {
     /* Main function */
     int **sudoku;
     sudoku = board_init();
+
+    clock_t begin = clock();
+
     if (is_valid_board(sudoku)) {
         printf("calculating . . .\n");
         if (solve_board(sudoku) is True) {
@@ -50,6 +54,11 @@ int main() {
     else {
         printf("can't find solution\n");
     }
+
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("Time %.10lfms\n", time_spent);
+
     return 0;
 }
 

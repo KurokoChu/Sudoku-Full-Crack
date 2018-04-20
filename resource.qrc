@@ -1,0 +1,25 @@
+<RCC>
+    <qresource prefix="/">
+        <file>src/resource/img/bg.png</file>
+        <file>src/resource/img/button.png</file>
+        <file>src/resource/img/Num1.png</file>
+        <file>src/resource/img/Num1H.png</file>
+        <file>src/resource/img/Num2.png</file>
+        <file>src/resource/img/Num2H.png</file>
+        <file>src/resource/img/Num3.png</file>
+        <file>src/resource/img/Num3H.png</file>
+        <file>src/resource/img/Num4.png</file>
+        <file>src/resource/img/Num4H.png</file>
+        <file>src/resource/img/Num5.png</file>
+        <file>src/resource/img/Num5H.png</file>
+        <file>src/resource/img/Num6.png</file>
+        <file>src/resource/img/Num6H.png</file>
+        <file>src/resource/img/Num7.png</file>
+        <file>src/resource/img/Num7H.png</file>
+        <file>src/resource/img/Num8.png</file>
+        <file>src/resource/img/Num8H.png</file>
+        <file>src/resource/img/Num9.png</file>
+        <file>src/resource/img/Num9H.png</file>
+        <file>src/resource/img/NumEmpty.png</file>
+    </qresource>
+</RCC>

@@ -1,19 +1,34 @@
 #include <string.h>
 
 #include "Sudoku.h"
+#include "SinglesTechnique.h"
+#include "IntersectionsTechnique.h"
+#include "SubsetsTechnique.h"
 
 // Global Variables
-int stepRound = 0;
+int stepRound;
 
-void startGuide()
-{
+int startGuide() {
     /* Main function */
     Setup();
-    int **sudoku;
+    int **sudoku, size_r = 9, size_c = 9;
+    eliminated = False;
+    stepRound = 0;
     sudoku = Init_Board(9, 9);
+    if (IsValid_Board(sudoku, size_r, size_c)) {
         if (Solve_Board(sudoku, 0, 0) isnot -1) {
+            if (IsValid_Board(sudoku, size_r, size_c) is True && Find_EmptySlot(sudoku, 0, 0) is False) {
+                Score_Summary();
+                return True;
+            }
+            else {
+                return False;
+            }
         }
-
+    }
+    else {
+        return -1;
+    }
 }
 
 int Solve_Board(int **board, int row, int col) {
@@ -30,7 +45,7 @@ int Solve_Board(int **board, int row, int col) {
 }
 
 int GetStep(int **board, int step) {
-    if (step > 3) {
+    if (step > 11) {
         return False;
     }
     for (int i = 0; i < 9; ++i) {
@@ -49,12 +64,15 @@ int GetStep(int **board, int step) {
 
 int DoStep(int **board, int row, int col, int step) {
     Update_Eliminated();
-    strcpy(textGuide[stepRound].text, "Full House : ");
+    char *text;
+    text = MemoryManage_1D(50);
     switch(step) {
         case 1:
             if (Find_FullHouse(board, row, col) is True) {
-
-                strcpy(textGuide[stepRound].text, "Full House : ");
+                (score[0].num is False) ? score[0].num = True: 1;
+                score[0].arr[0]++;
+                sprintf(text, "Full House : r%dc%d = %d", row + 1, col + 1, board[row][col]);
+                strcpy(textGuide[stepRound].text, text);
                 textGuide[stepRound].row = row + 1;
                 textGuide[stepRound].col = col + 1;
                 textGuide[stepRound].num = board[row][col];
@@ -65,7 +83,10 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 2:
             if (Find_NakedSingle(board, row, col) is True) {
-                strcpy(textGuide[stepRound].text, "Naked Single : ");
+                (score[1].num is False) ? score[1].num = True: 1;
+                score[1].arr[0]++;
+                sprintf(text, "Naked Single : r%dc%d = %d", row + 1, col + 1, board[row][col]);
+                strcpy(textGuide[stepRound].text, text);
                 textGuide[stepRound].row = row + 1;
                 textGuide[stepRound].col = col + 1;
                 textGuide[stepRound].num = board[row][col];
@@ -76,7 +97,10 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 3:
             if (Find_HiddenSingle(board, row, col) is True) {
-                strcpy(textGuide[stepRound].text, "Hidden Single : ");
+                (score[2].num is False) ? score[2].num = True: 1;
+                score[2].arr[0]++;
+                sprintf(text, "Hidden Single : r%dc%d = %d", row + 1, col + 1, board[row][col]);
+                strcpy(textGuide[stepRound].text, text);
                 textGuide[stepRound].row = row + 1;
                 textGuide[stepRound].col = col + 1;
                 textGuide[stepRound].num = board[row][col];
@@ -85,7 +109,199 @@ int DoStep(int **board, int row, int col, int step) {
                 return True;
             }
             break;
+        case 4:
+            if (Find_LockedPair(board, row, col) is True) {
+                (score[3].num is False) ? score[3].num = True: 1;
+                score[3].arr[0]++;
+                sprintf(text, "Locked Pair : [ %s] in r%dc%d and r%dc%d", Show_ArrayElement_1D(cell[row][col].arr, 9),
+                                                                          coord_pair.x1 + 1, coord_pair.y1 + 1,
+                                                                          coord_pair.x2 + 1, coord_pair.y2 + 1);
+                strcpy(textGuide[stepRound].text, text);
+                ++stepRound;
+                return True;
+            }
+            break;
+        case 5:
+            if (Find_LockedTriple(board, row, col) is True) {
+                (score[4].num is False) ? score[4].num = True: 1;
+                score[4].arr[0]++;
+                sprintf(text, "Locked Triple : [ %s] in r%dc%d, r%dc%d and r%dc%d", Show_ArrayElement_1D(triple.arr, 9),
+                                                                                    coord_pair.x1 + 1, coord_pair.y1 + 1,
+                                                                                    coord_pair.x2 + 1, coord_pair.y2 + 1,
+                                                                                    coord_pair.x3 + 1, coord_pair.y3 + 1);
+                strcpy(textGuide[stepRound].text, text);
+                ++stepRound;
+                return True;
+            }
+            break;
+        case 6:
+            if (Find_LockedCandidates_1(board, row, col) is True) {
+                (score[5].num is False) ? score[5].num = True: 1;
+                score[5].arr[0]++;
+                sprintf(text, "Locked Candidates Type 1 \"Pointing\" : [ %d ] in r%dc%d and r%dc%d\n", coord_pair.arr[0],
+                                                                                                       coord_pair.x1 + 1, coord_pair.y1 + 1,
+                                                                                                       coord_pair.x2 + 1, coord_pair.y2 + 1);
+                strcpy(textGuide[stepRound].text, text);
+                ++stepRound;
+                return True;
+            }
+            break;
+        case 7:
+            if (Find_LockedCandidates_2(board, row, col) is True) {
+                (score[6].num is False) ? score[6].num = True: 1;
+                score[6].arr[0]++;
+                sprintf(text, "Locked Candidates Type 2 \"Claiming\" : [ %d ] in ", coord_pair.arr[0]);
+                strcpy(textGuide[stepRound].text, text);
+                if (coord_pair.num is 1) {
+                    sprintf(text, "r%dc%d and r%dc%d", coord_pair.x1 + 1, coord_pair.y1 + 1, coord_pair.x2 + 1, coord_pair.y2 + 1);
+                    strcat(textGuide[stepRound].text, text);
+                }
+                else {
+                    sprintf(text, "r%dc%d, r%dc%d and r%dc%d", coord_pair.x1 + 1, coord_pair.y1 + 1, coord_pair.x2 + 1, coord_pair.y2 + 1, coord_pair.x3 + 1, coord_pair.y3 + 1);
+                    strcat(textGuide[stepRound].text, text);
+                }
+                ++stepRound;
+                return True;
+            }
+            break;
+        case 8:
+            if (Find_NakedPair(board, row, col) is True) {
+                (score[7].num is False) ? score[7].num = True: 1;
+                score[7].arr[0]++;
+                sprintf(text, "Naked Pair : [ %s] in r%dc%d and r%dc%d", Show_ArrayElement_1D(coord_pair.arr, 9),
+                                                                         coord_pair.x1 + 1, coord_pair.y1 + 1,
+                                                                         coord_pair.x2 + 1, coord_pair.y2 + 1);
+                strcpy(textGuide[stepRound].text, text);
+                ++stepRound;
+                return True;
+            }
+            break;
+        case 9:
+            if (Find_NakedTriple(board, row, col) is True) {
+                (score[8].num is False) ? score[8].num = True: 1;
+                score[8].arr[0]++;
+                sprintf(text, "Naked Triple : [ %s] in r%dc%d, r%dc%d and r%dc%d", Show_ArrayElement_1D(coord_pair.arr, 9),
+                                                                                   coord_pair.x1 + 1, coord_pair.y1 + 1,
+                                                                                   coord_pair.x2 + 1, coord_pair.y2 + 1,
+                                                                                   coord_pair.x3 + 1, coord_pair.y3 + 1);
+                strcpy(textGuide[stepRound].text, text);
+                ++stepRound;
+                return True;
+            }
+            break;
+        case 10:
+            if (Find_HiddenPair(board, row, col) is True) {
+                (score[9].num is False) ? score[9].num = True: 1;
+                score[9].arr[0]++;
+                sprintf(text, "Hidden Pair : [ %s] in r%dc%d and r%dc%d", Show_ArrayElement_1D(coord_pair.arr, 9),
+                                                                          coord_pair.x1 + 1, coord_pair.y1 + 1,
+                                                                          coord_pair.x2 + 1, coord_pair.y2 + 1);
+                strcpy(textGuide[stepRound].text, text);
+                ++stepRound;
+                return True;
+            }
+            break;
+        case 11:
+            if (Find_HiddenTriple(board, row, col) is True) {
+                (score[10].num is False) ? score[10].num = True: 1;
+                score[10].arr[0]++;
+                sprintf(text, "Hidden Triple : [ %s] in r%dc%d, r%dc%d and r%dc%d", Show_ArrayElement_1D(coord_pair.arr, 9),
+                                                                                    coord_pair.x1 + 1, coord_pair.y1 + 1,
+                                                                                    coord_pair.x2 + 1, coord_pair.y2 + 1,
+                                                                                    coord_pair.x3 + 1, coord_pair.y3 + 1);
+                strcpy(textGuide[stepRound].text, text);
+                ++stepRound;
+                return True;
+            }
+            break;
         default: return False;
     }
     return False;
+}
+
+void Score_Summary() {
+    char *text;
+    text = MemoryManage_1D(500);
+    int is_score = False, count = 0;
+    if (score[0].num is True) {
+        is_score = True;
+        sprintf(text, "%d Full House (%d)\n", score[0].arr[0], score[0].arr[0] * 4);
+        strcat(textSummary.text, text);
+        count += score[0].arr[0] * 4;
+    }
+    if (score[1].num is True) {
+        is_score = True;
+        sprintf(text, "%d Naked Single (%d)\n", score[1].arr[0], score[1].arr[0] * 4);
+        strcat(textSummary.text, text);
+        count += score[1].arr[0] * 4;
+    }
+    if (score[2].num is True) {
+        is_score = True;
+        sprintf(text, "%d Hidden Single (%d)\n", score[2].arr[0], score[2].arr[0] * 14);
+        strcat(textSummary.text, text);
+        count += score[2].arr[0] * 14;
+    }
+    if (score[3].num is True) {
+        is_score = True;
+        sprintf(text, "%d Locked Pair (%d)\n", score[3].arr[0], score[3].arr[0] * 40);
+        strcat(textSummary.text, text);
+        count += score[3].arr[0] * 40;
+    }
+    if (score[4].num is True) {
+        is_score = True;
+        sprintf(text, "%d Locked Triple (%d)\n", score[4].arr[0], score[4].arr[0] * 60);
+        strcat(textSummary.text, text);
+        count += score[4].arr[0] * 50;
+    }
+    if (score[5].num is True) {
+        is_score = True;
+        sprintf(text, "%d Locked Candidates Type 1 \"Pointing\" (%d)\n", score[5].arr[0], score[5].arr[0] * 50);
+        strcat(textSummary.text, text);
+        count += score[5].arr[0] * 50;
+    }
+    if (score[6].num is True) {
+        is_score = True;
+        sprintf(text, "%d Locked Candidates Type 2 \"Claiming\" (%d)\n", score[6].arr[0], score[6].arr[0] * 50);
+        strcat(textSummary.text, text);
+        count += score[6].arr[0] * 50;
+    }
+    if (score[7].num is True) {
+        is_score = True;
+        sprintf(text, "%d Naked Pair (%d)\n", score[7].arr[0], score[7].arr[0] * 60);
+        strcat(textSummary.text, text);
+        count += score[7].arr[0] * 60;
+    }
+    if (score[8].num is True) {
+        is_score = True;
+        sprintf(text, "%d Naked Triple (%d)\n", score[8].arr[0], score[8].arr[0] * 80);
+        strcat(textSummary.text, text);
+        count += score[8].arr[0] * 80;
+    }
+    if (score[9].num is True) {
+        is_score = True;
+        sprintf(text, "%d Hidden Pair (%d)\n", score[9].arr[0], score[9].arr[0] * 70);
+        strcat(textSummary.text, text);
+        count += score[9].arr[0] * 70;
+    }
+    if (score[10].num is True) {
+        is_score = True;
+        sprintf(text, "%d Hidden Triple (%d)\n", score[10].arr[0], score[10].arr[0] * 100);
+        strcat(textSummary.text, text);
+        count += score[10].arr[0] * 100;
+    }
+    if (score[11].num is True) {
+        is_score = True;
+        sprintf(text, "%d X-Wing (%d)\n", score[11].arr[0], score[11].arr[0] * 140);
+        strcat(textSummary.text, text);
+        count += score[11].arr[0] * 140;
+    }
+
+    if (is_score is True) {
+        sprintf(text, "Total : %d", count);
+        strcat(textSummary.text, text);
+    }
+    else {
+        sprintf(text, "No Summary");
+        strcat(textSummary.text, text);
+    }
 }

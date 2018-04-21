@@ -1,5 +1,5 @@
 #include "Sudoku.h"
-#include "Eliminated.h"
+#include "SudokuFunction.h"
 
 void Update_Eliminated() {
     eliminated = False;
@@ -106,11 +106,19 @@ int IsValid_Board(int **board, int size_r, int size_c) {
 
 int **Init_Board(int size_r, int size_c) {
     /* Create Sudoku's board */
-    int **board;
+    int **board, text[9][9] = {{8,4,1,0,2,9,0,0,0},
+                               {0,0,0,0,0,0,0,0,0},
+                               {7,9,0,0,0,0,4,0,8},
+                               {9,7,0,0,0,3,0,5,0},
+                               {0,0,3,0,0,0,7,0,0},
+                               {0,5,0,6,0,0,0,9,4},
+                               {3,0,9,0,0,0,0,4,5},
+                               {0,0,0,0,0,0,0,0,0},
+                               {0,0,0,1,8,0,9,3,2}};
     board = MemoryManage_2D(size_r, size_c);
     for(int i = 0; i < size_r; ++i) {
         for(int j = 0; j < size_c; ++j) {
-            board[i][j] = sudoBoard[i][j].num;
+            board[i][j] = text[i][j];
         }
     }
     return board;

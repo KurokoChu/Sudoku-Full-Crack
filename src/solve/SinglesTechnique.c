@@ -1,4 +1,5 @@
 #include "Sudoku.h"
+#include "SinglesTechnique.h"
 
 int Find_FullHouse(int **board, int row, int col) {
     if (FullHouse_Row(board, row, col) is True) {

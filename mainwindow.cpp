@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QFont>
 #include <QPalette>
+#include <QString>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -15,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    this->setMinimumSize(1080, 810);
+    this->setMaximumSize(1080, 810);
 
     grid_setNum = 0;
 
@@ -36,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setButtonNum(ui->pushButton_09, 9, 30, FALSE);
 
     QPushButton* controlButtons[9] = { ui->pushButton_01, ui->pushButton_02, ui->pushButton_03, ui->pushButton_04, ui->pushButton_05, ui->pushButton_06, ui->pushButton_07, ui->pushButton_08, ui->pushButton_09 };
-    SudokuGrid buttonGrid = initButtonGrid();
+    buttonGrid = initButtonGrid();
 
 
     for (int i = 0; i < 9; i++) {
@@ -79,6 +83,7 @@ QPushButton* MainWindow::getControlButton(int num) {
     if (num >= 1 && num <= 9) {
         return numButtons[num - 1];
     }
+    return NULL;
 }
 
 void MainWindow::controlButtonPressed(QPushButton *pushButton, int num) {
@@ -103,8 +108,14 @@ void MainWindow::controlButtonPressed(QPushButton *pushButton, int num) {
 
 void MainWindow::pushButtonPressed(QPushButton *pushButton, int row, int col) {
     if (grid_edit[row - 1][col - 1]) {
-        grid_locked[row - 1][col - 1] = grid_setNum;
-        setButtonNum(pushButton, grid_setNum, 40, FALSE);
+        if(grid_setNum == grid_locked[row - 1][col - 1]) {
+            setButtonNum(pushButton, 0, 40, FALSE);
+            grid_locked[row - 1][col - 1] = 0;
+        }
+        else {
+            grid_locked[row - 1][col - 1] = grid_setNum;
+            setButtonNum(pushButton, grid_setNum, 40, FALSE);
+        }
     }
 }
 
@@ -124,9 +135,7 @@ SudokuGrid MainWindow::initButtonGrid() {
     return buttonGrid;
 }
 
-void MainWindow::on_allStepButton_clicked()
-{
-    ui->allStepButton->setStyleSheet("QPushButton { border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+void MainWindow::on_allStepButton_clicked() {
     for(int i = 0; i < 9; ++i) {
         for(int j = 0; j < 9; ++j) {
             if( grid_locked[i][j] != 0) {
@@ -135,16 +144,36 @@ void MainWindow::on_allStepButton_clicked()
             }
         }
     }
-    startGuide();
-    SudokuGrid buttonGrid = initButtonGrid();
-    for(int i = 0; i < 9; ++i) {
-        for(int j = 0; j < 9; ++j) {
-            if(grid_edit[i][j] != 0) {
-                setButtonNum(buttonGrid[i][j], sudoBoard[i][j].num, 40, True);
+    int resultType = startGuide();
+    ui->listWidget->clear();
+    ui->textBrowser->clear();
+    if (resultType != -1) {
+        if (resultType == 1) {
+            for(int i = 0; textGuide[i].text[0] != 0; i++) {
+                ui->listWidget->addItem(textGuide[i].text);
             }
+            ui->textBrowser->setText(textSummary.text);
+        }
+        else {
+            ui->listWidget->addItem("No Solution");
         }
     }
-    for(int i = 0; textGuide[i].text[0] != '\0'; i++) {
-        ui->listWidget->addItem(textGuide[i].text + QString(tr("r")) + QString::number(textGuide[i].row) + QString(tr("c")) + QString::number(textGuide[i].col) + " = " + QString::number(textGuide[i].num));
+    else {
+        ui->listWidget->addItem("Invalid Sudoku! at r" + QString::number(coord.x + 1) + QString(tr("c")) + QString::number(coord.y + 1));
+    }
+}
+
+void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item) {
+    int index = ui->listWidget->currentRow();
+    for(int i = 0; i < 9; ++i) {
+        for(int j = 0; j < 9; ++j) {
+            setButtonNum(buttonGrid[i][j], 0, 40, FALSE);
+        }
+    }
+    for(int i = 0; i < index + 1; ++i) {
+        int row = textGuide[i].row, col = textGuide[i].col;
+        if(row != 0 && col != 0) {
+            setButtonNum(buttonGrid[row - 1][col - 1], sudoBoard[row - 1][col - 1].num, 40, TRUE);
+        }
     }
 }

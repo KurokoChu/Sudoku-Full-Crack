@@ -29,15 +29,18 @@ SOURCES += \
         src/solve/SinglesTechnique.c \
         src/solve/Sudoku.c \
         src/solve/SudokuFunction.c \
-        src/solve/Utility.c
+        src/solve/Utility.c \
+        src/solve/IntersectionsTechnique.c \
+    src/solve/SubsetsTechnique.c
 
 HEADERS += \
         mainwindow.h \
-        src/solve/Eliminated.h \
         src/solve/SinglesTechnique.h \
         src/solve/Sudoku.h \
         src/solve/SudokuFunction.h \
-        src/solve/Utility.h
+        src/solve/Utility.h \
+        src/solve/IntersectionsTechnique.h \
+    src/solve/SubsetsTechnique.h
 
 FORMS += \
         mainwindow.ui

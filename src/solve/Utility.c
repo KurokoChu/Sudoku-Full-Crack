@@ -1,4 +1,5 @@
 #include "Sudoku.h"
+#include "Utility.h"
 
 void Setup() {
     for (int i = 0; i < 9; ++i) {
@@ -16,13 +17,24 @@ void Setup() {
     for (int i = 0; i < 200; ++i) {
         textGuide[i].text = MemoryManage_1D(100);
     }
+    textGuide[0].text[0] = '\0';
+    textSummary.text = MemoryManage_1D(500);
+    textSummary.text[0] = '\0';
     coord_pair.arr = MemoryManage_1D(2);
 }
 
-void Show_ArrayElement_1D(int *arr, int size) {
+char *Show_ArrayElement_1D(int *arr, int size) {
+    int count = 0;
+    char *text;
+    text = MemoryManage_1D(200);
     for (int i = 0; i < size; ++i) {
-        (arr[i] isnot EmptySlot) ? printf("%d ", arr[i]): 1;
+        if (arr[i] isnot EmptySlot) {
+            text[count++] = arr[i] + 48;
+            text[count++] = ' ';
+        }
     }
+    text[count + 1] = '\0';
+    return text;
 }
 
 int ArrayCount_1D(int *arr, int size) {

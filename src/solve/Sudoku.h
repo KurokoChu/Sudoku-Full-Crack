@@ -9,6 +9,7 @@ typedef struct {
     int row, col, num;
 } text;
 text textGuide[200];
+text textSummary;
 
 // #include <python.h>
 #define True 1
@@ -48,8 +49,12 @@ typedef struct {
     int x1, y1, x2, y2, x3, y3, x4, y4, *arr, num;
 } point2;
 point2 coord_pair;
+point2 coord_pair_text[9][9];
 
-void startGuide();
+// Global Variables
+int eliminated;
+
+int startGuide();
 int Solve_Board(int **board, int row, int col);
 int GetStep(int **board, int step);
 int DoStep(int **board, int row, int col, int step);
@@ -65,12 +70,9 @@ int IsValid_Board(int **board, int size_r, int size_c);
 void Update_Board(int **board, int row, int col);
 
 void Setup();
-void Show_ArrayElement_1D(int *arr, int size);
 int ArrayCount_1D(int *arr, int size);
 int ArrayCount_2D(int **arr, int size_r, int size_c);
 int *MemoryManage_1D(int size);
 int **MemoryManage_2D(int row, int col);
-
-#include "SinglesTechnique.h"
 
 #endif

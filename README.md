@@ -1,11 +1,7 @@
 ![](/src/resource/readmeImg/banner.png)
 
----
-
 # Sudoku Full Crack
 A Project for Computer Programming @ KMITL
-
----
 
 ## Definition
 * Sudoku is a 9x9 grid number puzzle with 3x3 9-sub grid. Game start with a few of digits 1 - 9 in 9x9 grid,
@@ -20,10 +16,17 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 ## Dataset
 * [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)
 
+---
+
 # Team Members
 |  |Firstname|Lastname|GitHub Username|Student ID|
 |:-:|--|------|---------------|---------|
 |![https://www.facebook.com/J4MERzIMMORTAL](/src/resource/readmeImg/pic_60070099.jpg)|Supakit|Rodthong|[@KurokoChu](https://github.com/KurokoChu)|60070099|
+
+# Assistant Teacher
+|ผศ. ดร. กิติ์สุชาติ พสุภา|ผศ. ดร. ปานวิทย์ ธุวะนุติ|
+|:-:|:-:|
+|![](/src/resource/readmeImg/pic_Oung.png)|![](/src/resource/readmeImg/pic_Panwit.png)|
 
 ---
 

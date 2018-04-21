@@ -239,7 +239,7 @@ void MainWindow::on_clearButton_clicked() {
 
     ui->tabWidget->setCurrentIndex(0);
     ui->listWidget->clear();
-    ui->textBrowser->clear();
+    ui->textBrowser->setText("New Game!");
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             if(grid_locked[i][j] == 0) {

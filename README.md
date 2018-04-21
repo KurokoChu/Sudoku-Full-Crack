@@ -23,7 +23,7 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 # Team Members
 |  |Firstname|Lastname|GitHub Username|Student ID|
 |:-:|--|------|---------------|---------|
-|![https://www.facebook.com/J4MERzIMMORTAL](/Resource/sagelga.png)|Kunanon|Srisuntiroj|[@sagelga](https://github.com/KurokoChu)|60070099|
+|![https://www.facebook.com/J4MERzIMMORTAL](/src/resource/readmeImg/pic_60070099.jpg)|Supakit|Rodthong|[@KurokoChu](https://github.com/KurokoChu)|60070099|
 
 ---
 

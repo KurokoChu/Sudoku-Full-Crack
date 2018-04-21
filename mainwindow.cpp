@@ -1,7 +1,6 @@
 #include <QtGui>
 #include <QMessageBox>
 #include <QFont>
-#include <QPalette>
 #include <QString>
 
 #include "mainwindow.h"
@@ -176,6 +175,7 @@ void MainWindow::on_allStepButton_clicked() {
                     ui->listWidget->addItem(textGuide[i].text);
                 }
                 ui->textBrowser->setText(textSummary.text);
+                ui->listWidget->addItem("Finish!");
             }
             else {
                 for(int i = 0; textGuide[i].text[0] != 0; i++) {
@@ -352,5 +352,20 @@ void MainWindow::selectGridCandidate(int index) {
         pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
         pushButton = buttonGrid[coord_pair.x4][coord_pair.y4];
         pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+    if (48 <= event->text() && event->text() <= 57) {
+        int num = event->text().toInt();
+        QPushButton *pushButton;
+        if (num != 0) {
+            pushButton = getControlButton(num);
+            controlButtonPressed(pushButton, num);
+        }
+        else {
+            pushButton = getControlButton(grid_setNum);
+            controlButtonPressed(pushButton, grid_setNum);
+        }
     }
 }

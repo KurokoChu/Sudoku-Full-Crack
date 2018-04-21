@@ -42,7 +42,7 @@ HEADERS += \
         src/solve/Utility.h \
         src/solve/IntersectionsTechnique.h \
         src/solve/SubsetsTechnique.h \
-        src/solve/BasicFishTechnique.h \
+        src/solve/BasicFishTechnique.h
 
 FORMS += \
         mainwindow.ui

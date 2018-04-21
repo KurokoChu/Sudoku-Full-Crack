@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QPushButton>
-#include <QListWidgetItem>
 
 using SudokuGrid = std::array<std::array<QPushButton*, 9>, 9>;
 
@@ -25,6 +24,7 @@ private slots:
     void on_allStepButton_clicked();
     void on_listWidget_itemDoubleClicked();
     void on_clearButton_clicked();
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     Ui::MainWindow *ui;

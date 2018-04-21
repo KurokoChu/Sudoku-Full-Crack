@@ -1,4 +1,6 @@
-# Sudoku-Full-Crack
+![](/src/resource/readmeImg/banner.png)
+
+# Sudoku Full Crack
 * A Project for Computer Programming @ KMITL
 
 ## Definition

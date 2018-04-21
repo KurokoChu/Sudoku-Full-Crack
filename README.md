@@ -18,12 +18,12 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 
 ---
 
-# Team Members
+## Team Members
 |  |Firstname|Lastname|GitHub Username|Student ID|
 |:-:|--|------|---------------|---------|
 |![https://www.facebook.com/J4MERzIMMORTAL](/src/resource/readmeImg/pic_60070099.jpg)|Supakit|Rodthong|[@KurokoChu](https://github.com/KurokoChu)|60070099|
 
-# Assistant Teacher
+## Assistant Teacher
 |ผศ. ดร. กิติ์สุชาติ พสุภา|ผศ. ดร. ปานวิทย์ ธุวะนุติ|
 |:-:|:-:|
 |![](/src/resource/readmeImg/pic_Oung.png)|![](/src/resource/readmeImg/pic_Panwit.png)|

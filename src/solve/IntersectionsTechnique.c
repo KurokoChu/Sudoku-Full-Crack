@@ -98,7 +98,7 @@ void Block_LockedRow(int **board, int num, int row_block, int col_block) {
     for (int i = 0; i < 9; ++i) {
         if (board[row_block][i] is EmptySlot) {
             if (i isnot coord_pair.y1 && i isnot coord_pair.y2) {
-                Eliminate_Digit(board, num, row_block, i);
+                Eliminate_Digit(num, row_block, i);
                 Update_Board(board, row_block, i);
             }
         }
@@ -109,7 +109,7 @@ void Block_LockedCol(int **board, int num, int row_block, int col_block) {
     for (int i = 0; i < 9; ++i) {
         if (board[i][col_block] is EmptySlot) {
             if (i isnot coord_pair.x1 && i isnot coord_pair.x2) {
-                Eliminate_Digit(board, num, i, col_block);
+                Eliminate_Digit(num, i, col_block);
                 Update_Board(board, i, col_block);
             }
         }
@@ -125,7 +125,7 @@ void Block_LockedSub(int **board, int num, int row_block, int col_block) {
                     (i is coord_pair.x2 && j is coord_pair.y2)) {
                     continue;
                 }
-                Eliminate_Digit(board, num, i, j);
+                Eliminate_Digit(num, i, j);
                 Update_Board(board, i, j);
             }
         }
@@ -405,7 +405,7 @@ void Block_RowTriple(int **board, int num, int row_block, int col_block) {
             if (i isnot coord_pair.y1 && 
                 i isnot coord_pair.y2 &&
                 i isnot coord_pair.y3) {
-                Eliminate_Digit(board, num, row_block, i);
+                Eliminate_Digit(num, row_block, i);
                 Update_Board(board, row_block, i);
             }
         }
@@ -418,7 +418,7 @@ void Block_ColTriple(int **board, int num, int row_block, int col_block) {
             if (i isnot coord_pair.x1 && 
                 i isnot coord_pair.x2 &&
                 i isnot coord_pair.x3) {
-                Eliminate_Digit(board, num, i, col_block);
+                Eliminate_Digit(num, i, col_block);
                 Update_Board(board, i, col_block);
             }
         }
@@ -435,7 +435,7 @@ void Block_SubTriple(int **board, int num, int row_block, int col_block) {
                     (i is coord_pair.x3 && j is coord_pair.y3)) {
                     continue;
                 }
-                Eliminate_Digit(board, num, i, j);
+                Eliminate_Digit(num, i, j);
                 Update_Board(board, i, j);
             }
         }

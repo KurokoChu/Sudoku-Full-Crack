@@ -5,7 +5,7 @@
 int Find_EmptySlot(int **board, int start_r, int start_c);
 int CanFillIn(int num, int **board, int size_r, int size_c);
 int *Candidate_Digit(int **board, int size_r, int size_c);
-void Eliminate_Digit(int **board, int num, int row, int col);
+void Eliminate_Digit(int num, int row, int col);
 int AppendIn(int num, int **board, int size_r, int size_c, char cmp);
 int IsValid_Board(int **board, int size_r, int size_c);
 int **Init_Board(int **board);

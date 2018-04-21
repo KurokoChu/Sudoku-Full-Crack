@@ -162,7 +162,7 @@ void Block_RowQuart(int **board, int num, int row_block, int col_block) {
                 i isnot coord_pair.y2 &&
                 i isnot coord_pair.y3 &&
                 i isnot coord_pair.y4) {
-                Eliminate_Digit(board, num, row_block, i);
+                Eliminate_Digit(num, row_block, i);
                 Update_Board(board, row_block, i);
             }
         }
@@ -176,7 +176,7 @@ void Block_ColQuart(int **board, int num, int row_block, int col_block) {
                 i isnot coord_pair.x2 &&
                 i isnot coord_pair.x3 &&
                 i isnot coord_pair.x4) {
-                Eliminate_Digit(board, num, i, col_block);
+                Eliminate_Digit(num, i, col_block);
                 Update_Board(board, i, col_block);
             }
         }

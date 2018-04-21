@@ -39,7 +39,7 @@ int *Candidate_Digit(int **board, int size_r, int size_c) {
     return Digit_arr;
 }
 
-void Eliminate_Digit(int **board, int num, int row, int col) {
+void Eliminate_Digit(int num, int row, int col) {
     if (cell[row][col].arr[num - 1] isnot EmptySlot) {
         eliminated = True;
         eliminate[row][col].arr[num - 1] = num;

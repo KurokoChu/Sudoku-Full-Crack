@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>src/resource/img/bg.png</file>
         <file>src/resource/img/button.png</file>
         <file>src/resource/img/Num1.png</file>
         <file>src/resource/img/Num1H.png</file>
@@ -21,5 +20,7 @@
         <file>src/resource/img/Num9.png</file>
         <file>src/resource/img/Num9H.png</file>
         <file>src/resource/img/NumEmpty.png</file>
+        <file>src/resource/img/sudoku.png</file>
+        <file>src/resource/img/sudoku.ico</file>
     </qresource>
 </RCC>

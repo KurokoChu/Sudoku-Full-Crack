@@ -4,6 +4,7 @@
 #include "SinglesTechnique.h"
 #include "IntersectionsTechnique.h"
 #include "SubsetsTechnique.h"
+#include "BasicFishTechnique.h"
 
 int stepRound;
 
@@ -15,7 +16,7 @@ int startGuide(int **board, int onlyGetStep, int freezeLoop) {
     stepRound = 0;
     sudoku = Init_Board(board);
     if (IsValid_Board(sudoku, size_r, size_c)) {
-        if (Solve_Board(sudoku, 0, 0, onlyGetStep, freezeLoop) isnot -1) {
+        if (Solve_Board(sudoku, onlyGetStep, freezeLoop) isnot -1) {
             if (IsValid_Board(sudoku, size_r, size_c) is True && Find_EmptySlot(sudoku, 0, 0) is False) {
                 Score_Summary();
                 return True;
@@ -28,9 +29,10 @@ int startGuide(int **board, int onlyGetStep, int freezeLoop) {
     else {
         return -1;
     }
+    return 0;
 }
 
-int Solve_Board(int **board, int row, int col, int onlyGetStep, int freezeLoop) {
+int Solve_Board(int **board, int onlyGetStep, int freezeLoop) {
     /* Find the solution */
     for (int i = 0; i < 9; ++i) {
         for (int j = 0; j < 9; ++j) {
@@ -58,7 +60,7 @@ int GetStep(int **board, int step, int onlyGetStep, int freezeLoop) {
                 coord.x = i;
                 coord.y = j;
                 if (DoStep(board, i, j, step) is True) {
-                    return Solve_Board(board, 0, 0, onlyGetStep, freezeLoop);
+                    return Solve_Board(board, onlyGetStep, freezeLoop);
                 }
             }
         }

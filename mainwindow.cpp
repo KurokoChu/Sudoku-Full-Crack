@@ -21,11 +21,16 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setMaximumSize(1080, 810);
 
     grid_setNum = 0;
+    is_clickedAllStep = FALSE;
+    is_inValid = FALSE;
+    is_noSolution = FALSE;
 
+    grid_edited = MemoryManage_2D(9, 9);
+    grid_step = MemoryManage_2D(9, 9);
+    grid_locked = MemoryManage_2D(9, 9);
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             grid_edit[i][j] = 1;
-            grid_locked[i][j] = 0;
         }
     }
 
@@ -44,15 +49,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     for (int i = 0; i < 9; i++) {
-        connect(controlButtons[i], &QPushButton::clicked, [ = ]() {
-            controlButtonPressed(controlButtons[i], i + 1);
-        });
+        connect(controlButtons[i], &QPushButton::clicked, [ = ]() { controlButtonPressed(controlButtons[i], i + 1); });
     }
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
-            connect(buttonGrid[i][j], &QPushButton::clicked, [ = ]() {
-                pushButtonPressed(buttonGrid[i][j], i + 1, j + 1);
-            });
+            connect(buttonGrid[i][j], &QPushButton::clicked, [ = ]() { pushButtonPressed(buttonGrid[i][j], i + 1, j + 1); });
         }
     }
 }
@@ -64,7 +65,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setButtonNum(QPushButton *pushButton, int num, int size, bool onlyHover) {
     if (num == 0) {
-        pushButton->setIcon(QIcon(":/src/resource/img/NumEmpty.png"));
+        pushButton->setIcon(QIcon(""));
     } else if (num >= 1 && num <= 9) {
         QString strIcon = QString::fromUtf8(":/src/resource/img/");
         strIcon.push_back(QString("Num"));
@@ -136,44 +137,220 @@ SudokuGrid MainWindow::initButtonGrid() {
 }
 
 void MainWindow::on_allStepButton_clicked() {
-    for(int i = 0; i < 9; ++i) {
-        for(int j = 0; j < 9; ++j) {
-            if( grid_locked[i][j] != 0) {
-                sudoBoard[i][j].num = grid_locked[i][j];
+    if (is_clickedAllStep == FALSE) {
+        for(int i = 0; i < 9; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                if (grid_locked[i][j] != 0) {
+                    grid_edited[i][j] = 1;
+                }
+            }
+        }
+        QPushButton *pushButton;
+        for(int i = 0; i < 9; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                pushButton = buttonGrid[i][j];
+                if(grid_locked[i][j] != 0) {
+                    grid_step[i][j] = grid_locked[i][j];
+                    setButtonNum(buttonGrid[i][j], grid_locked[i][j], 40, FALSE);
+                }
+                else {
+                    pushButton->setStyleSheet("QPushButton { color: rgb(155, 155, 155); border:1 px solid gray; background-color: rgb(51, 51, 51); } QPushButton::pressed { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+                }
+            }
+        }
+        ui->tabWidget->setCurrentIndex(1);
+        for(int i = 0; i < 9; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                if( grid_locked[i][j] != 0) {
+                    sudoBoard[i][j].num = grid_locked[i][j];
+                }
                 grid_edit[i][j] = 0;
             }
         }
-    }
-    int resultType = startGuide();
-    ui->listWidget->clear();
-    ui->textBrowser->clear();
-    if (resultType != -1) {
-        if (resultType == 1) {
-            for(int i = 0; textGuide[i].text[0] != 0; i++) {
-                ui->listWidget->addItem(textGuide[i].text);
+        int resultType = startGuide(grid_locked, FALSE, 0);
+        ui->listWidget->clear();
+        ui->textBrowser->clear();
+        if (resultType != -1) {
+            if (resultType == 1) {
+                for(int i = 0; textGuide[i].text[0] != 0; i++) {
+                    ui->listWidget->addItem(textGuide[i].text);
+                }
+                ui->textBrowser->setText(textSummary.text);
             }
-            ui->textBrowser->setText(textSummary.text);
+            else {
+                for(int i = 0; textGuide[i].text[0] != 0; i++) {
+                    ui->listWidget->addItem(textGuide[i].text);
+                }
+                ui->listWidget->addItem("No Solution");
+                ui->textBrowser->setText("Can't find solution\nSudoku may be many Solution (not Unique) or Can't solve with Technique in Library.");
+                is_noSolution = TRUE;
+            }
         }
         else {
-            ui->listWidget->addItem("No Solution");
+            ui->listWidget->addItem("Invalid Sudoku! at r" + QString::number(coord.x + 1) + QString(tr("c")) + QString::number(coord.y + 1));
+            pushButton = buttonGrid[coord.x][coord.y];
+            pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+            setButtonNum(pushButton, grid_locked[coord.x][coord.y], 40, TRUE);
+            is_inValid = TRUE;
         }
-    }
-    else {
-        ui->listWidget->addItem("Invalid Sudoku! at r" + QString::number(coord.x + 1) + QString(tr("c")) + QString::number(coord.y + 1));
+        is_clickedAllStep = TRUE;
     }
 }
 
-void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item) {
-    int index = ui->listWidget->currentRow();
-    for(int i = 0; i < 9; ++i) {
-        for(int j = 0; j < 9; ++j) {
-            setButtonNum(buttonGrid[i][j], 0, 40, FALSE);
+void MainWindow::on_listWidget_itemDoubleClicked() {
+    if (is_inValid == FALSE) {
+        int index = ui->listWidget->currentRow();
+        int loop = index;
+        QPushButton *pushButton;
+        for(int i = 0; i < 9; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                pushButton = buttonGrid[i][j];
+                if (grid_locked[i][j] == 0) {
+                    setButtonNum(pushButton, 0, 40, FALSE);
+                }
+                pushButton->setStyleSheet("QPushButton { color: rgb(155, 155, 155); border:1 px solid gray; background-color: rgb(51, 51, 51); } QPushButton::pressed { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+            }
+        }
+        gridCandidate(index + 1);
+        selectGridCandidate(index);
+        gridCandidate(index);
+        if (is_noSolution == TRUE) {
+            gridCandidate(index);
+        }
+        for(int num = 0; num < loop; ++num) {
+            int row = textGuide[num].row, col = textGuide[num].col;
+            if(row != 0 && col != 0) {
+                pushButton = buttonGrid[row - 1][col - 1];
+                pushButton->setText("");
+                setButtonNum(pushButton, sudoBoard[row - 1][col - 1].num, 40, TRUE);
+            }
         }
     }
-    for(int i = 0; i < index + 1; ++i) {
-        int row = textGuide[i].row, col = textGuide[i].col;
-        if(row != 0 && col != 0) {
-            setButtonNum(buttonGrid[row - 1][col - 1], sudoBoard[row - 1][col - 1].num, 40, TRUE);
+}
+
+void MainWindow::on_clearButton_clicked() {
+    QPushButton *pushButton;
+    if (grid_setNum != 0) {
+        pushButton = getControlButton(grid_setNum);
+        pushButton->setStyleSheet("QPushButton { border:1 px solid gray; background-color: #f19b38; }");
+        setButtonNum(pushButton, grid_setNum, 30, FALSE);
+        grid_setNum = 0;
+    }
+
+    ui->tabWidget->setCurrentIndex(0);
+    ui->listWidget->clear();
+    ui->textBrowser->clear();
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            if(grid_locked[i][j] == 0) {
+                buttonGrid[i][j]->setText("");
+            }
+            sudoBoard[i][j].num = 0;
+            grid_edit[i][j] = 1;
+            grid_locked[i][j] = 0;
+            grid_step[i][j] = 0;
+            setButtonNum(buttonGrid[i][j], 0, 40, FALSE);
+            pushButton = buttonGrid[i][j];
+            pushButton->setStyleSheet("QPushButton { border:1 px solid gray; background-color: rgb(51, 51, 51); } QPushButton::pressed { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
         }
+    }
+    is_clickedAllStep = FALSE;
+    is_inValid = FALSE;
+    is_noSolution = FALSE;
+}
+
+void MainWindow::gridCandidate(int loopFreeze) {
+    startGuide(grid_step, TRUE, loopFreeze);
+    char *text, *temp;
+    text = MemoryManage_1D_Char(64);
+    temp = MemoryManage_1D_Char(32);
+    temp[0] = '\0';
+    for(int i = 0; i < 9; ++i) {
+        for(int j = 0; j < 9; ++j) {
+            text[0] = '\0';
+            if(grid_locked[i][j] == 0) {
+                for (int num = 0; num < 9; ++num) {
+                    if ((num + 1) % 3 != 0) {
+                        if ((num + 1 != 7)) {
+                            if (cell[i][j].arr[num] != 0) {
+                                sprintf(temp, "%d    ", cell[i][j].arr[num]);
+                                strcat(text, temp);
+                            }
+                            else {
+                                sprintf(temp, "%c    ", '_');
+                                strcat(text, temp);
+                            }
+                        }
+                        else {
+                            if (cell[i][j].arr[num] != 0) {
+                                sprintf(temp, "    %d    ", cell[i][j].arr[num]);
+                                strcat(text, temp);
+                            }
+                            else {
+                                sprintf(temp, "    %c    ", '_');
+                                strcat(text, temp);
+                            }
+                        }
+                    }
+                    else {
+                        if (num + 1 != 9) {
+                            if (cell[i][j].arr[num] != 0) {
+                                sprintf(temp, "%d    \n", cell[i][j].arr[num]);
+                                strcat(text, temp);
+                            }
+                            else {
+                                sprintf(temp, "%c    \n", '_');
+                                strcat(text, temp);
+                            }
+                        }
+                        else {
+                            if (cell[i][j].arr[num] != 0) {
+                                sprintf(temp, "%d    ", cell[i][j].arr[num]);
+                                strcat(text, temp);
+                            }
+                            else {
+                                sprintf(temp, "%c    ", '_');
+                                strcat(text, temp);
+                            }
+                        }
+                    }
+                }
+                buttonGrid[i][j]->setText(text);
+            }
+        }
+    }
+}
+
+void MainWindow::selectGridCandidate(int index) {
+    QPushButton *pushButton;
+    if (textGuide[index].numCoord == 1) {
+        pushButton = buttonGrid[textGuide[index].row - 1][textGuide[index].col - 1];
+        pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+
+    }
+    else if (textGuide[index].numCoord == 2) {
+        pushButton = buttonGrid[coord_pair.x1][coord_pair.y1];
+        pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+        pushButton = buttonGrid[coord_pair.x2][coord_pair.y2];
+        pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+
+    }
+    else if (textGuide[index].numCoord == 3) {
+        pushButton = buttonGrid[coord_pair.x1][coord_pair.y1];
+        pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+        pushButton = buttonGrid[coord_pair.x2][coord_pair.y2];
+        pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+        pushButton = buttonGrid[coord_pair.x3][coord_pair.y3];
+        pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+    }
+    else if (textGuide[index].numCoord == 4) {
+        pushButton = buttonGrid[coord_pair.x1][coord_pair.y1];
+        pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+        pushButton = buttonGrid[coord_pair.x2][coord_pair.y2];
+        pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+        pushButton = buttonGrid[coord_pair.x3][coord_pair.y3];
+        pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+        pushButton = buttonGrid[coord_pair.x4][coord_pair.y4];
+        pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
     }
 }

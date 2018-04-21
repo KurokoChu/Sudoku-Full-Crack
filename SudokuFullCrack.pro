@@ -31,7 +31,8 @@ SOURCES += \
         src/solve/SudokuFunction.c \
         src/solve/Utility.c \
         src/solve/IntersectionsTechnique.c \
-    src/solve/SubsetsTechnique.c
+    src/solve/SubsetsTechnique.c \
+    src/solve/BasicFishTechnique.c
 
 HEADERS += \
         mainwindow.h \
@@ -40,7 +41,8 @@ HEADERS += \
         src/solve/SudokuFunction.h \
         src/solve/Utility.h \
         src/solve/IntersectionsTechnique.h \
-    src/solve/SubsetsTechnique.h
+    src/solve/SubsetsTechnique.h \
+    src/solve/BasicFishTechnique.h
 
 FORMS += \
         mainwindow.ui

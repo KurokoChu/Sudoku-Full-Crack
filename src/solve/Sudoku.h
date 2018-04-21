@@ -6,7 +6,7 @@
 
 typedef struct {
     char *text;
-    int row, col, num;
+    int row, col, num, numCoord;
 } text;
 text textGuide[200];
 text textSummary;
@@ -54,13 +54,13 @@ point2 coord_pair_text[9][9];
 // Global Variables
 int eliminated;
 
-int startGuide();
-int Solve_Board(int **board, int row, int col);
-int GetStep(int **board, int step);
+int startGuide(int **board, int onlyGetStep, int freezeLoop);
+int Solve_Board(int **board, int row, int col, int onlyGetStep, int freezeLoop);
+int GetStep(int **board, int step, int onlyGetStep, int freezeLoop);
 int DoStep(int **board, int row, int col, int step);
 
 void Update_Eliminated();
-int **Init_Board(int row, int col);
+int **Init_Board(int **board);
 int Find_EmptySlot(int **board, int start_r, int start_c);
 int CanFillIn(int num, int **board, int size_r, int size_c);
 int *Candidate_Digit(int **board, int size_r, int size_c);
@@ -69,10 +69,6 @@ int AppendIn(int num, int **board, int size_r, int size_c, char cmp);
 int IsValid_Board(int **board, int size_r, int size_c);
 void Update_Board(int **board, int row, int col);
 
-void Setup();
-int ArrayCount_1D(int *arr, int size);
-int ArrayCount_2D(int **arr, int size_r, int size_c);
-int *MemoryManage_1D(int size);
-int **MemoryManage_2D(int row, int col);
+#include "Utility.h"
 
 #endif

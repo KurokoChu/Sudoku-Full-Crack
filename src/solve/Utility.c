@@ -16,6 +16,7 @@ void Setup() {
     }
     for (int i = 0; i < 200; ++i) {
         textGuide[i].text = MemoryManage_1D(100);
+        textGuide[i].numCoord = 0;
     }
     textGuide[0].text[0] = '\0';
     textSummary.text = MemoryManage_1D(500);
@@ -63,6 +64,16 @@ int *MemoryManage_1D(int size) {
     /* Memory manage 1-Dimension Array */
     int *arr;
     arr = malloc(size * sizeof(int));
+    for (int i = 0; i < size; ++i) {
+        arr[i] = 0;
+    }
+    return arr;
+}
+
+char *MemoryManage_1D_Char(int size) {
+    /* Memory manage 1-Dimension Array */
+    char *arr;
+    arr = malloc(size * sizeof(char));
     for (int i = 0; i < size; ++i) {
         arr[i] = 0;
     }

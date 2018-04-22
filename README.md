@@ -27,9 +27,6 @@ Right bottom is 4 buttons,
 * Generate Puzzle(Create a proposition.) 
 * All possible step(Show the solution in each slot.)
 * New(Clear the table.)
-![](/src/resource/readmeImg/ui_1.png)
-![](/src/resource/readmeImg/ui_2.png)
-* You can Set Value in Cell and See guiding step here
 
 ## Dataset
 * [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)

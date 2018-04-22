@@ -547,8 +547,8 @@ void MainWindow::on_startGameButton_clicked() {
             sudoku = MemoryManage_2D(9, 9);
             for(int i = 0; i < 9; ++i) {
                 for (int j = 0; j < 9; ++j) {
-                    if (grid_locked[i][j] != 0) {
-                        sudoku[i][j] = grid_locked[i][j];
+                    if (grid_merge[i][j] != 0) {
+                        sudoku[i][j] = grid_merge[i][j];
                     }
                     grid_edit[i][j] = 0;
                 }

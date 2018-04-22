@@ -19,9 +19,12 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 ---
 
 ## Team Members
-|  |Firstname|Lastname|GitHub Username|Student ID|
-|:|https://th-th.facebook.com/people/Angkrit-Boonrod/100002428626326|(/src/resource/readmeImg/pic_59070191.jpg)|Angkrit|Boonrod|(https://github.com/ITFSTUDENT191)|59070191|
-|![https://www.facebook.com/J4MERzIMMORTAL](/src/resource/readmeImg/pic_60070099.jpg)|Supakit|Rodthong|[@KurokoChu](https://github.com/KurokoChu)|60070099|
+|![](/src/resource/readmeImg/pic_59070191.jpg)|![](/src/resource/readmeImg/pic_60070088.jpg)|![](/src/resource/readmeImg/pic_60070099.jpg)|
+|:-:|:-:|:-:|
+|Angkrit Boonrod|Wassapol Pungjap|Supakit Rodthong|
+|59070191|60070088|60070099|
+|(https://github.com/ITFSTUDENT191)|(https://github.com/abc666777)|(https://github.com/KurokoChu)
+
 
 ## Assistant Teacher
 |Kitsuchart Pasupa|Panwit Tuwanut|

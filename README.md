@@ -32,10 +32,10 @@ Right bottom is 4 buttons,
 * Generate Puzzle - Get Sudoku Puzzle can be different up to 8000 games.
 * All possible step - Show the solution in each slot.
 * New - Clear the table to start new game.<br>
+### You can set value in cell by clicking the panel to select the number and press on sudoku cell. You can also use numpad instead.
 ![](/src/resource/readmeImg/ui_1.png)<br>
-You can set value in cell by clicking the panel to select the number and press on sudoku cell. You can also use numpad instead.<br>
+### You can learning how to solve Sudoku by double clicking the list of step in this panel.
 ![](/src/resource/readmeImg/ui_2.png)<br>
-You can learning how to solve Sudoku by double clicking the list of step in this panel.
 
 ## Dataset
 * [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)

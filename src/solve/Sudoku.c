@@ -75,7 +75,7 @@ int DoStep(int **board, int row, int col, int step) {
     switch(step) {
         case 1:
             if (Find_FullHouse(board, row, col) is True) {
-                (score[0].num is False) ? score[0].num = True: 1;
+                score[0].num = True;
                 score[0].arr[0]++;
                 sprintf(text, "Full House : r%dc%d = %d", row + 1, col + 1, board[row][col]);
                 strcpy(textGuide[stepRound].text, text);
@@ -90,7 +90,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 2:
             if (Find_NakedSingle(board, row, col) is True) {
-                (score[1].num is False) ? score[1].num = True: 1;
+                score[1].num = True;
                 score[1].arr[0]++;
                 sprintf(text, "Naked Single : r%dc%d = %d", row + 1, col + 1, board[row][col]);
                 strcpy(textGuide[stepRound].text, text);
@@ -105,7 +105,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 3:
             if (Find_HiddenSingle(board, row, col) is True) {
-                (score[2].num is False) ? score[2].num = True: 1;
+                ;score[2].num = True;
                 score[2].arr[0]++;
                 sprintf(text, "Hidden Single : r%dc%d = %d", row + 1, col + 1, board[row][col]);
                 strcpy(textGuide[stepRound].text, text);
@@ -120,7 +120,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 4:
             if (Find_LockedPair(board, row, col) is True) {
-                (score[3].num is False) ? score[3].num = True: 1;
+                ;score[3].num = True;
                 score[3].arr[0]++;
                 sprintf(text, "Locked Pair : [ %s] in r%dc%d and r%dc%d", Show_ArrayElement_1D(cell[row][col].arr, 9),
                                                                           coord_pair.x1 + 1, coord_pair.y1 + 1,
@@ -133,7 +133,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 5:
             if (Find_LockedTriple(board, row, col) is True) {
-                (score[4].num is False) ? score[4].num = True: 1;
+                score[4].num = True;
                 score[4].arr[0]++;
                 sprintf(text, "Locked Triple : [ %s] in r%dc%d, r%dc%d and r%dc%d", Show_ArrayElement_1D(triple.arr, 9),
                                                                                     coord_pair.x1 + 1, coord_pair.y1 + 1,
@@ -147,7 +147,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 6:
             if (Find_LockedCandidates_1(board, row, col) is True) {
-                (score[5].num is False) ? score[5].num = True: 1;
+                score[5].num = True;
                 score[5].arr[0]++;
                 sprintf(text, "Locked Candidates Type 2 \"Claiming\" : [ %d ] in r%dc%d and r%dc%d", coord_pair.arr[0],
                                                                             coord_pair.x1 + 1, coord_pair.y1 + 1,
@@ -160,7 +160,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 7:
             if (Find_LockedCandidates_2(board, row, col) is True) {
-                (score[6].num is False) ? score[6].num = True: 1;
+                score[6].num = True;
                 score[6].arr[0]++;
                 sprintf(text, "Locked Candidates Type 2 \"Claiming\" : [ %d ] in ", coord_pair.arr[0]);
                 strcpy(textGuide[stepRound].text, text);
@@ -180,7 +180,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 8:
             if (Find_NakedPair(board, row, col) is True) {
-                (score[7].num is False) ? score[7].num = True: 1;
+                score[7].num = True;
                 score[7].arr[0]++;
                 sprintf(text, "Naked Pair : [ %s] in r%dc%d and r%dc%d", Show_ArrayElement_1D(coord_pair.arr, 9),
                                                                          coord_pair.x1 + 1, coord_pair.y1 + 1,
@@ -193,7 +193,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 9:
             if (Find_NakedTriple(board, row, col) is True) {
-                (score[8].num is False) ? score[8].num = True: 1;
+                score[8].num = True;
                 score[8].arr[0]++;
                 sprintf(text, "Naked Triple : [ %s] in r%dc%d, r%dc%d and r%dc%d", Show_ArrayElement_1D(coord_pair.arr, 9),
                                                                                    coord_pair.x1 + 1, coord_pair.y1 + 1,
@@ -207,7 +207,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 10:
             if (Find_HiddenPair(board, row, col) is True) {
-                (score[9].num is False) ? score[9].num = True: 1;
+                score[9].num = True;
                 score[9].arr[0]++;
                 sprintf(text, "Hidden Pair : [ %s] in r%dc%d and r%dc%d", Show_ArrayElement_1D(coord_pair.arr, 9),
                                                                           coord_pair.x1 + 1, coord_pair.y1 + 1,
@@ -220,7 +220,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 11:
             if (Find_HiddenTriple(board, row, col) is True) {
-                (score[10].num is False) ? score[10].num = True: 1;
+                score[10].num = True;
                 score[10].arr[0]++;
                 sprintf(text, "Hidden Triple : [ %s] in r%dc%d, r%dc%d and r%dc%d", Show_ArrayElement_1D(coord_pair.arr, 9),
                                                                                     coord_pair.x1 + 1, coord_pair.y1 + 1,
@@ -234,7 +234,7 @@ int DoStep(int **board, int row, int col, int step) {
             break;
         case 12:
             if (Find_XWing(board, row, col) is True) {
-                (score[11].num is False) ? score[11].num = True: 1;
+                score[11].num = True;
                 score[11].arr[0]++;
                 sprintf(text, "X-Wing : [ %d ] in r%dc%d, r%dc%d, r%dc%d and r%dc%d\n", coord_pair.arr[0],
                                                                                         coord_pair.x1 + 1, coord_pair.y1 + 1,
@@ -254,7 +254,7 @@ int DoStep(int **board, int row, int col, int step) {
 
 void Score_Summary() {
     char *text;
-    text = MemoryManage_1D_Char(500);
+    text = MemoryManage_1D_Char(1000);
     int is_score = False, count = 0;
     if (score[0].num is True) {
         is_score = True;

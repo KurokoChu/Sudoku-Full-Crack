@@ -25,12 +25,8 @@ private slots:
     void on_listWidget_itemDoubleClicked();
     void on_clearButton_clicked();
     void keyPressEvent(QKeyEvent *event);
-
     void on_randomButton_clicked();
-
     void on_startGameButton_clicked();
-
-    void on_actionDigit_Candidate_triggered();
 
 private:
     Ui::MainWindow *ui;

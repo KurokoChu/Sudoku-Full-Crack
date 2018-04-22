@@ -193,7 +193,7 @@ SudokuGrid MainWindow::initButtonGrid() {
 }
 
 void MainWindow::on_allStepButton_clicked() {
-    if (is_clickedAllStep == FALSE) {
+    if (is_clickedAllStep == FALSE && is_inValid == FALSE && is_noSolution == FALSE) {
         for(int i = 0; i < 9; ++i) {
             for(int j = 0; j < 9; ++j) {
                 if (grid_edited[i][j] != 0) {
@@ -225,6 +225,7 @@ void MainWindow::on_allStepButton_clicked() {
                 grid_edit[i][j] = 0;
             }
         }
+        gridCandidate(grid_merge);
         int resultType = startGuide(grid_locked, FALSE, 0);
         ui->listWidget->clear();
         ui->textBrowser->clear();
@@ -247,19 +248,21 @@ void MainWindow::on_allStepButton_clicked() {
         }
         else {
             ui->listWidget->addItem("Invalid Sudoku! at r" + QString::number(coord.x + 1) + QString(tr("c")) + QString::number(coord.y + 1));
+            ui->textBrowser->setText("Invalid Sudoku! look at r" + QString::number(coord.x + 1) + QString(tr("c")) + QString::number(coord.y + 1) + "\nPlease re-enter Sudoku again");
             pushButton = buttonGrid[coord.x][coord.y];
             pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
             setButtonNum(pushButton, grid_locked[coord.x][coord.y], 40, TRUE);
             is_inValid = TRUE;
         }
         is_clickedAllStep = TRUE;
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                Update_Board(grid_merge, i, j);
+            for (int i = 0; i < 9; ++i) {
+                for (int j = 0; j < 9; ++j) {
+                    Update_Board(grid_merge, i, j);
+                }
             }
-        }
-        gridCandidate(grid_merge);
+            gridCandidate(grid_merge);
     }
+
 }
 
 void MainWindow::on_listWidget_itemDoubleClicked() {
@@ -551,45 +554,20 @@ void MainWindow::on_startGameButton_clicked() {
                 }
             }
             if(Find_EmptySlot(sudoku, 0, 0) == TRUE) {
-                ui->textBrowser->setText("UNFINISHED!");
+                ui->textBrowser->setText("UNFINISHED!\n Press 'New' and try again or See all solution step");
             }
             else if(IsValid_Board(sudoku, 9, 9) == FALSE) {
                 ui->textBrowser->setText("WRONG! Look at r" + QString::number(coord.x + 1) + QString(tr("c")) + QString::number(coord.y + 1) + "\nTry again" );
             }
             else {
-                ui->textBrowser->setText("CORRECT!");
+                char *text;
+                ui->textBrowser->setText("CORRECT!\n");
+                ui->textBrowser->append(textSummary.text);
             }
         }
     }
     else {
         ui->textBrowser->setText("Press 'New' and try again");
     }
-    if (optionCandidate == TRUE && is_clickedAllStep == FALSE) {
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                Update_Board(grid_merge, i, j);
-            }
-        }
-        gridCandidate(grid_merge);
-    }
 }
 
-void MainWindow::on_actionDigit_Candidate_triggered() {
-    optionCandidate = !optionCandidate;
-    if (optionCandidate == TRUE) {
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                Update_Board(grid_merge, i, j);
-            }
-        }
-        gridCandidate(grid_merge);
-    }
-    else {
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                Update_Board(grid_merge, i, j);
-            }
-        }
-        gridCandidate(grid_merge);
-    }
-}

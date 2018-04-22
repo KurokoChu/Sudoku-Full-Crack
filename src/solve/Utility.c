@@ -19,7 +19,7 @@ void Setup() {
         textGuide[i].numCoord = 0;
     }
     textGuide[0].text[0] = '\0';
-    textSummary.text = MemoryManage_1D(500);
+    textSummary.text = MemoryManage_1D(1000);
     textSummary.text[0] = '\0';
     coord_pair.arr = MemoryManage_1D(2);
 }

@@ -3282,13 +3282,6 @@ color: rgb(255, 255, 255);</string>
    <property name="nativeMenuBar">
     <bool>true</bool>
    </property>
-   <widget class="QMenu" name="menuOptions">
-    <property name="title">
-     <string>Options...</string>
-    </property>
-    <addaction name="actionDigit_Candidate"/>
-   </widget>
-   <addaction name="menuOptions"/>
   </widget>
   <action name="actionDigit_Candidate">
    <property name="checkable">

@@ -31,7 +31,11 @@ Right bottom is 4 buttons,
 * Start Game - Playable mode, you can play by yourself and check for solution
 * Generate Puzzle - Get Sudoku Puzzle
 * All possible step - Show the solution in each slot
-* New - Clear the table to start new game
+* New - Clear the table to start new game<br>
+![](/src/resource/readmeImg/ui_1.png)<br>
+You can set value in cell by clicking the panel to select the number and press on sudoku cell. You can also use numpad instead.<br>
+![](/src/resource/readmeImg/ui_2.png)<br>
+You can learning how to solve Sudoku by double clicking the list of step in this panel.
 
 ## Dataset
 * [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)

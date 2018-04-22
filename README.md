@@ -11,7 +11,7 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 ## Requirement 
 * Qt 5.10
 * MinGW 5.30 32bit g++
-* Windows plateform
+* Windows platform
 
 ## Objective
 * This Game for people who not have experiences for Sudoku.

@@ -11,6 +11,7 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 ## Requirement 
 * Qt 5.10
 * MinGW 5.30 32bit g++
+* Windows plateform
 
 ## Objective
 * This Game for people who not have experiences for Sudoku.
@@ -20,16 +21,17 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 ## How to build
 * Install Qt Creator
 * Open SudokuFullCrack.pro and build it
+* You can Run execute file in release instead
 
 # Sample Interface
 ![](/src/resource/readmeImg/ui_3.png)
 The right side of the game is cell Activity number 1-9 to fill in the table.
 List step it's responsible for checking the wrong slot and displaying the correct information.When Press All possible step.
 Right bottom is 4 buttons, 
-* start Game 
-* Generate Puzzle(Create a proposition.) 
-* All possible step(Show the solution in each slot.)
-* New(Clear the table.)
+* Start Game - Playable mode, you can play by yourself and check for solution
+* Generate Puzzle - Get Sudoku Puzzle
+* All possible step - Show the solution in each slot
+* New - Clear the table to start new game
 
 ## Dataset
 * [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)

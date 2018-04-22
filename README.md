@@ -9,7 +9,8 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 * Sudoku Full Crack is a program that will teach you how to complete a Sudoku, step by step, it will also teach you the used technique too.
 
 ## Requirement 
-* This Game can play for 1 player or brainstorm many people.
+* Qt 5.10
+* MinGW 5.30 32bit g++
 
 ## Objective
 *This Game for people who not have experiences for Sudoku.
@@ -17,6 +18,8 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 *Helps in the habit of deliberate planning. make a free time to benefit.
 
 ## How to build
+* Install Qt Creator
+* Open SudokuFullCrack.pro and build it
 
 # Sample Interface
 ![](/src/resource/readmeImg/ui_3.png)

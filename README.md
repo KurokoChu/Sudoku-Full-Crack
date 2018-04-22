@@ -6,6 +6,7 @@ A Project for Computer Programming @ KMITL
 ## Definition
 * Sudoku is a 9x9 grid number puzzle with 3x3 9-sub grid. Game start with a few of digits 1 - 9 in 9x9 grid,
 requires player to fill blanks in a 9x9 grid with digits. each column, each row, and each of the nine 3×3 subgrids must contains all of the digits from 1 to 9.
+* Sudoku Full Crack is a program that will teach you how to complete a Sudoku, step by step, it will also teach you the used technique too.
 
 ## Requirement
 

@@ -19,21 +19,26 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setMinimumSize(1080, 810);
     this->setMaximumSize(1080, 810);
 
+    Setup();
+
     grid_setNum = 0;
     is_clickedAllStep = FALSE;
     is_inValid = FALSE;
     is_noSolution = FALSE;
     is_gameStart = FALSE;
     is_clear = FALSE;
+    optionCandidate = TRUE;
     sameRandom = -1;
 
     grid_edited = MemoryManage_2D(9, 9);
     grid_step = MemoryManage_2D(9, 9);
     grid_locked = MemoryManage_2D(9, 9);
+    grid_merge = MemoryManage_2D(9, 9);
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             grid_edit[i][j] = 1;
             grid_edited[i][j] = 0;
+            grid_merge[i][j] = 0;
         }
     }
 
@@ -59,6 +64,16 @@ MainWindow::MainWindow(QWidget *parent) :
             connect(buttonGrid[i][j], &QPushButton::clicked, [ = ]() { pushButtonPressed(buttonGrid[i][j], i + 1, j + 1); });
         }
     }
+
+    if (optionCandidate == TRUE) {
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                Update_Board(grid_merge, i, j);
+            }
+        }
+        gridCandidate(grid_merge);
+    }
+
 }
 
 MainWindow::~MainWindow()
@@ -111,29 +126,51 @@ void MainWindow::controlButtonPressed(QPushButton *pushButton, int num) {
 }
 
 void MainWindow::pushButtonPressed(QPushButton *pushButton, int row, int col) {
-    if (is_gameStart == FALSE) {
-        if (grid_edit[row - 1][col - 1]) {
-            if(grid_setNum == grid_locked[row - 1][col - 1]) {
-                setButtonNum(pushButton, 0, 40, FALSE);
-                grid_locked[row - 1][col - 1] = 0;
+    if (is_noSolution == FALSE && is_inValid == FALSE) {
+        if (is_gameStart == FALSE) {
+            if (is_clickedAllStep == TRUE) {
+                for(int i = 0; i < 9; ++i) {
+                    for(int j = 0; j < 9; ++j) {
+                        grid_edit[i][j] = 0;
+                    }
+                }
             }
-            else {
-                grid_locked[row - 1][col - 1] = grid_setNum;
-                setButtonNum(pushButton, grid_setNum, 40, FALSE);
+            if (grid_edit[row - 1][col - 1]) {
+                if(grid_setNum == grid_locked[row - 1][col - 1]) {
+                    setButtonNum(pushButton, 0, 40, FALSE);
+                    grid_locked[row - 1][col - 1] = 0;
+                    grid_merge[row - 1][col - 1] = 0;
+                }
+                else {
+                    grid_locked[row - 1][col - 1] = grid_setNum;
+                    setButtonNum(pushButton, grid_setNum, 40, FALSE);
+                    grid_merge[row - 1][col - 1] = grid_setNum;
+                }
             }
         }
-    }
-    else {
-        if (grid_edit[row - 1][col - 1]) {
-            if(grid_setNum == grid_locked[row - 1][col - 1]) {
-                setButtonNum(pushButton, 0, 40, FALSE);
-                grid_locked[row - 1][col - 1] = 0;
-                grid_edited[row - 1][col - 1] = 0;
+        else {
+            if (grid_edit[row - 1][col - 1]) {
+                if(grid_setNum == grid_merge[row - 1][col - 1]) {
+                    setButtonNum(pushButton, 0, 40, FALSE);
+                    pushButton->setText("");
+                    grid_edited[row - 1][col - 1] = 0;
+                    grid_merge[row - 1][col - 1] = 0;
+                }
+                else {
+                    setButtonNum(pushButton, grid_setNum, 40, TRUE);
+                    grid_edited[row - 1][col - 1] = grid_setNum;
+                    grid_merge[row - 1][col - 1] = grid_setNum;
+                }
             }
-            else {
-                grid_locked[row - 1][col - 1] = grid_setNum;
-                setButtonNum(pushButton, grid_setNum, 40, TRUE);
-                grid_edited[row - 1][col - 1] = grid_setNum;
+        }
+        if (is_clickedAllStep == FALSE) {
+            for (int i = 0; i < 9; ++i) {
+                for (int j = 0; j < 9; ++j) {
+                    Update_Board(grid_merge, i, j);
+                }
+            }
+            if (optionCandidate == TRUE) {
+                gridCandidate(grid_merge);
             }
         }
     }
@@ -176,6 +213,7 @@ void MainWindow::on_allStepButton_clicked() {
                 else {
                     pushButton->setStyleSheet("QPushButton { color: rgb(155, 155, 155); border:1 px solid gray; background-color: rgb(51, 51, 51); } QPushButton::pressed { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
                 }
+                grid_merge[i][j] = grid_locked[i][j];
             }
         }
         ui->tabWidget->setCurrentIndex(1);
@@ -215,6 +253,12 @@ void MainWindow::on_allStepButton_clicked() {
             is_inValid = TRUE;
         }
         is_clickedAllStep = TRUE;
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                Update_Board(grid_merge, i, j);
+            }
+        }
+        gridCandidate(grid_merge);
     }
 }
 
@@ -229,14 +273,18 @@ void MainWindow::on_listWidget_itemDoubleClicked() {
                 if (grid_locked[i][j] == 0) {
                     setButtonNum(pushButton, 0, 40, FALSE);
                 }
+                grid_merge[i][j] = grid_locked[i][j];
                 pushButton->setStyleSheet("QPushButton { color: rgb(155, 155, 155); border:1 px solid gray; background-color: rgb(51, 51, 51); } QPushButton::pressed { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
             }
         }
-        gridCandidate(index + 1);
+        startGuide(grid_step, TRUE, index + 1);
+        gridCandidate(grid_step);
         selectGridCandidate(index);
-        gridCandidate(index);
+        startGuide(grid_step, TRUE, index);
+        gridCandidate(grid_step);
         if (is_noSolution == TRUE) {
-            gridCandidate(index);
+            startGuide(grid_step, TRUE, index);
+            gridCandidate(grid_step);
         }
         for(int num = 0; num < loop; ++num) {
             int row = textGuide[num].row, col = textGuide[num].col;
@@ -244,9 +292,11 @@ void MainWindow::on_listWidget_itemDoubleClicked() {
                 pushButton = buttonGrid[row - 1][col - 1];
                 pushButton->setText("");
                 setButtonNum(pushButton, sudoBoard[row - 1][col - 1].num, 40, TRUE);
+                grid_merge[row - 1][col - 1] = sudoBoard[row - 1][col - 1].num;
             }
         }
     }
+
 }
 
 void MainWindow::on_clearButton_clicked() {
@@ -270,6 +320,7 @@ void MainWindow::on_clearButton_clicked() {
             grid_edit[i][j] = 1;
             grid_locked[i][j] = 0;
             grid_step[i][j] = 0;
+            grid_merge[i][j] = 0;
             setButtonNum(buttonGrid[i][j], 0, 40, FALSE);
             pushButton = buttonGrid[i][j];
             pushButton->setStyleSheet("QPushButton { border:1 px solid gray; background-color: rgb(51, 51, 51); } QPushButton::pressed { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
@@ -280,10 +331,18 @@ void MainWindow::on_clearButton_clicked() {
     is_noSolution = FALSE;
     is_gameStart = FALSE;
     is_clear = TRUE;
+    for (int i = 0; i < 9; ++i) {
+        for (int j = 0; j < 9; ++j) {
+            Update_Board(grid_merge, i, j);
+        }
+    }
+    if (optionCandidate == TRUE) {
+        gridCandidate(grid_merge);
+    }
 }
 
-void MainWindow::gridCandidate(int loopFreeze) {
-    startGuide(grid_step, TRUE, loopFreeze);
+void MainWindow::gridCandidate(int **grid) {
+    QPushButton *pushButton;
     char *text, *temp;
     text = MemoryManage_1D_Char(64);
     temp = MemoryManage_1D_Char(32);
@@ -291,7 +350,11 @@ void MainWindow::gridCandidate(int loopFreeze) {
     for(int i = 0; i < 9; ++i) {
         for(int j = 0; j < 9; ++j) {
             text[0] = '\0';
-            if(grid_locked[i][j] == 0) {
+            pushButton = buttonGrid[i][j];
+            if (is_clickedAllStep != TRUE && is_inValid != TRUE) {
+                pushButton->setStyleSheet("QPushButton { color: rgb(155, 155, 155); border:1 px solid gray; background-color: rgb(51, 51, 51); } QPushButton::pressed { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+            }
+            if(grid[i][j] == 0 && optionCandidate == TRUE) {
                 for (int num = 0; num < 9; ++num) {
                     if ((num + 1) % 3 != 0) {
                         if ((num + 1 != 7)) {
@@ -339,6 +402,9 @@ void MainWindow::gridCandidate(int loopFreeze) {
                     }
                 }
                 buttonGrid[i][j]->setText(text);
+            }
+            else {
+                buttonGrid[i][j]->setText("");
             }
         }
     }
@@ -418,7 +484,16 @@ void MainWindow::on_randomButton_clicked() {
             grid_locked[i][j] = grid.split("")[++count].toInt();
             pushButton = buttonGrid[i][j];
             setButtonNum(pushButton, grid_locked[i][j], 40, FALSE);
+            grid_merge[i][j] = grid_locked[i][j];
         }
+    }
+    for (int i = 0; i < 9; ++i) {
+        for (int j = 0; j < 9; ++j) {
+            Update_Board(grid_merge, i, j);
+        }
+    }
+    if (optionCandidate == TRUE) {
+        gridCandidate(grid_merge);
     }
 }
 
@@ -432,6 +507,7 @@ void MainWindow::on_startGameButton_clicked() {
                 for(int j = 0; j < 9; ++j) {
                     if (grid_locked[i][j] != 0) {
                         grid_edit[i][j] = 0;
+                        grid_merge[i][j] = grid_locked[i][j];
                     }
                 }
             }
@@ -487,5 +563,33 @@ void MainWindow::on_startGameButton_clicked() {
     }
     else {
         ui->textBrowser->setText("Press 'New' and try again");
+    }
+    if (optionCandidate == TRUE && is_clickedAllStep == FALSE) {
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                Update_Board(grid_merge, i, j);
+            }
+        }
+        gridCandidate(grid_merge);
+    }
+}
+
+void MainWindow::on_actionDigit_Candidate_triggered() {
+    optionCandidate = !optionCandidate;
+    if (optionCandidate == TRUE) {
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                Update_Board(grid_merge, i, j);
+            }
+        }
+        gridCandidate(grid_merge);
+    }
+    else {
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                Update_Board(grid_merge, i, j);
+            }
+        }
+        gridCandidate(grid_merge);
     }
 }

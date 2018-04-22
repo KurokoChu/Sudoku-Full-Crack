@@ -22,20 +22,20 @@ int Find_LockedPair(int **board, int row, int col) {
                         coord_pair.y2 = j;
                         for (int num = 0; num < 9; ++num) {
                             if (cell[row][col].arr[num] isnot EmptySlot) {
-                                Block_LockedSub(board, num + 1, row, col); 
+                                Block_LockedSub(board, num + 1, row, col);
                             }
                         }
                         if (row is i) {
                             for (int num = 0; num < 9; ++num) {
                                 if (cell[row][col].arr[num] isnot EmptySlot) {
-                                    Block_LockedRow(board, num + 1, row, col); 
+                                    Block_LockedRow(board, num + 1, row, col);
                                 }
                             }
                         }
                         else {
                             for (int num = 0; num < 9; ++num) {
                                 if (cell[row][col].arr[num] isnot EmptySlot) {
-                                    Block_LockedCol(board, num + 1, row, col); 
+                                    Block_LockedCol(board, num + 1, row, col);
                                 }
                             }
                         }
@@ -402,7 +402,7 @@ int *Col_LockedElement(int **board, int row, int col) {
 void Block_RowTriple(int **board, int num, int row_block, int col_block) {
     for (int i = 0; i < 9; ++i) {
         if (board[row_block][i] is EmptySlot) {
-            if (i isnot coord_pair.y1 && 
+            if (i isnot coord_pair.y1 &&
                 i isnot coord_pair.y2 &&
                 i isnot coord_pair.y3) {
                 Eliminate_Digit(num, row_block, i);
@@ -415,7 +415,7 @@ void Block_RowTriple(int **board, int num, int row_block, int col_block) {
 void Block_ColTriple(int **board, int num, int row_block, int col_block) {
     for (int i = 0; i < 9; ++i) {
         if (board[i][col_block] is EmptySlot) {
-            if (i isnot coord_pair.x1 && 
+            if (i isnot coord_pair.x1 &&
                 i isnot coord_pair.x2 &&
                 i isnot coord_pair.x3) {
                 Eliminate_Digit(num, i, col_block);

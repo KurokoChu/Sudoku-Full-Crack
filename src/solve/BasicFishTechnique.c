@@ -50,7 +50,7 @@ int RowBase_XWing(int **board, int row, int col) {
             coord_pair.x4 = -1;
             coord_pair.y4 = -1;
             count = 0;
-            if (cell[i][coord_pair.y1].arr[num] isnot EmptySlot && 
+            if (cell[i][coord_pair.y1].arr[num] isnot EmptySlot &&
                 cell[i][coord_pair.y2].arr[num] isnot EmptySlot) {
                 for (int j = 0; j < 9; ++j) {
                     if (board[i][j] isnot EmptySlot) {
@@ -122,7 +122,7 @@ int ColBase_XWing(int **board, int row, int col) {
             coord_pair.x4 = -1;
             coord_pair.y4 = -1;
             count = 0;
-            if (cell[coord_pair.x1][i].arr[num] isnot EmptySlot && 
+            if (cell[coord_pair.x1][i].arr[num] isnot EmptySlot &&
                 cell[coord_pair.x2][i].arr[num] isnot EmptySlot) {
                 for (int j = 0; j < 9; ++j) {
                     if (board[j][i] isnot EmptySlot) {
@@ -158,7 +158,7 @@ int ColBase_XWing(int **board, int row, int col) {
 void Block_RowQuart(int **board, int num, int row_block, int col_block) {
     for (int i = 0; i < 9; ++i) {
         if (board[row_block][i] is EmptySlot) {
-            if (i isnot coord_pair.y1 && 
+            if (i isnot coord_pair.y1 &&
                 i isnot coord_pair.y2 &&
                 i isnot coord_pair.y3 &&
                 i isnot coord_pair.y4) {
@@ -172,7 +172,7 @@ void Block_RowQuart(int **board, int num, int row_block, int col_block) {
 void Block_ColQuart(int **board, int num, int row_block, int col_block) {
     for (int i = 0; i < 9; ++i) {
         if (board[i][col_block] is EmptySlot) {
-            if (i isnot coord_pair.x1 && 
+            if (i isnot coord_pair.x1 &&
                 i isnot coord_pair.x2 &&
                 i isnot coord_pair.x3 &&
                 i isnot coord_pair.x4) {

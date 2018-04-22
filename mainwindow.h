@@ -30,6 +30,8 @@ private slots:
 
     void on_startGameButton_clicked();
 
+    void on_actionDigit_Candidate_triggered();
+
 private:
     Ui::MainWindow *ui;
 
@@ -37,6 +39,7 @@ private:
     int **grid_edited;
     int **grid_locked;
     int **grid_step;
+    int **grid_merge;
     int grid_setNum;
     SudokuGrid buttonGrid;
     int onlyGetStepRound;
@@ -45,12 +48,13 @@ private:
     int is_noSolution;
     int is_gameStart;
     int is_clear;
+    int optionCandidate;
     int sameRandom;
 
     QPushButton* getControlButton(int num);
     void setButtonNum(QPushButton *pushButton, int num, int size, bool onlyHover);
     SudokuGrid initButtonGrid();
-    void gridCandidate(int loopFreeze);
+    void gridCandidate(int **grid);
     void selectGridCandidate(int index);
 
 };

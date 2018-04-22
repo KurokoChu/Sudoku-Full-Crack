@@ -19,7 +19,8 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 ## How to build
 
 ## Sample Interface
-The right side of the game is the number(1-9) to fill in the table.
+The right side of the game is cell Activity number 1-9 to fill in the table.
+List step it's responsible for checking the wrong slot and displaying the correct information.When Press All possible step.
 Right bottom is 4 buttons, 
 	1.start Game 
 	2.Generate Puzzle(Create a proposition.) 

@@ -9,12 +9,11 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 * Sudoku Full Crack is a program that will teach you how to complete a Sudoku, step by step, it will also teach you the used technique too.
 
 ## Requirement 
-* This Game can play for player 1 and player 2 
+* This Game can play for player 1 and player 2.
 
 ## Objective
-*This Game for people who not have experiences for Sudoku
-
-This Project create for people who want to brain training make you more intelligent,for fun and it's m
+*This Game for people who not have experiences for Sudoku.
+*This Game create for people who want to brain training make you more intelligent.
 
 ## How to build
 

@@ -19,6 +19,13 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 ## How to build
 
 ## Sample Interface
+The right side of the game is the number(1-9) to fill in the table.
+Right bottom is 4 buttons, 
+	1.start Game 
+	2.Generate Puzzle(Create a proposition.) 
+	3.All possible step(Show the solution in each slot.)
+	4.New(Clear the table.)
+Lower left has Summary it tell the status of the running game.
 
 ## Dataset
 * [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)

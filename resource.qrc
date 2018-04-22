@@ -22,5 +22,6 @@
         <file>src/resource/img/NumEmpty.png</file>
         <file>src/resource/img/sudoku.png</file>
         <file>src/resource/img/sudoku.ico</file>
+        <file>src/generate/sudokuTable.txt</file>
     </qresource>
 </RCC>

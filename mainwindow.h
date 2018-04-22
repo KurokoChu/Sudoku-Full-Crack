@@ -26,6 +26,10 @@ private slots:
     void on_clearButton_clicked();
     void keyPressEvent(QKeyEvent *event);
 
+    void on_randomButton_clicked();
+
+    void on_startGameButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -39,6 +43,9 @@ private:
     int is_clickedAllStep;
     int is_inValid;
     int is_noSolution;
+    int is_gameStart;
+    int is_clear;
+    int sameRandom;
 
     QPushButton* getControlButton(int num);
     void setButtonNum(QPushButton *pushButton, int num, int size, bool onlyHover);

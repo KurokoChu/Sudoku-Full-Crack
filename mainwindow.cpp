@@ -23,6 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
     is_clickedAllStep = FALSE;
     is_inValid = FALSE;
     is_noSolution = FALSE;
+    is_gameStart = FALSE;
+    is_clear = FALSE;
+    sameRandom = -1;
 
     grid_edited = MemoryManage_2D(9, 9);
     grid_step = MemoryManage_2D(9, 9);
@@ -30,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             grid_edit[i][j] = 1;
+            grid_edited[i][j] = 0;
         }
     }
 
@@ -107,14 +111,30 @@ void MainWindow::controlButtonPressed(QPushButton *pushButton, int num) {
 }
 
 void MainWindow::pushButtonPressed(QPushButton *pushButton, int row, int col) {
-    if (grid_edit[row - 1][col - 1]) {
-        if(grid_setNum == grid_locked[row - 1][col - 1]) {
-            setButtonNum(pushButton, 0, 40, FALSE);
-            grid_locked[row - 1][col - 1] = 0;
+    if (is_gameStart == FALSE) {
+        if (grid_edit[row - 1][col - 1]) {
+            if(grid_setNum == grid_locked[row - 1][col - 1]) {
+                setButtonNum(pushButton, 0, 40, FALSE);
+                grid_locked[row - 1][col - 1] = 0;
+            }
+            else {
+                grid_locked[row - 1][col - 1] = grid_setNum;
+                setButtonNum(pushButton, grid_setNum, 40, FALSE);
+            }
         }
-        else {
-            grid_locked[row - 1][col - 1] = grid_setNum;
-            setButtonNum(pushButton, grid_setNum, 40, FALSE);
+    }
+    else {
+        if (grid_edit[row - 1][col - 1]) {
+            if(grid_setNum == grid_locked[row - 1][col - 1]) {
+                setButtonNum(pushButton, 0, 40, FALSE);
+                grid_locked[row - 1][col - 1] = 0;
+                grid_edited[row - 1][col - 1] = 0;
+            }
+            else {
+                grid_locked[row - 1][col - 1] = grid_setNum;
+                setButtonNum(pushButton, grid_setNum, 40, TRUE);
+                grid_edited[row - 1][col - 1] = grid_setNum;
+            }
         }
     }
 }
@@ -139,8 +159,9 @@ void MainWindow::on_allStepButton_clicked() {
     if (is_clickedAllStep == FALSE) {
         for(int i = 0; i < 9; ++i) {
             for(int j = 0; j < 9; ++j) {
-                if (grid_locked[i][j] != 0) {
-                    grid_edited[i][j] = 1;
+                if (grid_edited[i][j] != 0) {
+                    grid_locked[i][j] = 0;
+                    setButtonNum(buttonGrid[i][j], 0, 40, FALSE);
                 }
             }
         }
@@ -175,14 +196,14 @@ void MainWindow::on_allStepButton_clicked() {
                     ui->listWidget->addItem(textGuide[i].text);
                 }
                 ui->textBrowser->setText(textSummary.text);
-                ui->listWidget->addItem("Finish!");
+                ui->listWidget->addItem("Finish !");
             }
             else {
                 for(int i = 0; textGuide[i].text[0] != 0; i++) {
                     ui->listWidget->addItem(textGuide[i].text);
                 }
-                ui->listWidget->addItem("No Solution");
-                ui->textBrowser->setText("Can't find solution\nSudoku may be many Solution (not Unique) or Can't solve with Technique in Library.");
+                ui->listWidget->addItem("Can't find Solution . . .");
+                ui->textBrowser->setText("No Solution\nSudoku may have many Solution (not Unique) or Can't solve with Technique in Library.");
                 is_noSolution = TRUE;
             }
         }
@@ -257,6 +278,8 @@ void MainWindow::on_clearButton_clicked() {
     is_clickedAllStep = FALSE;
     is_inValid = FALSE;
     is_noSolution = FALSE;
+    is_gameStart = FALSE;
+    is_clear = TRUE;
 }
 
 void MainWindow::gridCandidate(int loopFreeze) {
@@ -360,12 +383,109 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         int num = event->text().toInt();
         QPushButton *pushButton;
         if (num != 0) {
-            pushButton = getControlButton(num);
-            controlButtonPressed(pushButton, num);
+            if (num != grid_setNum) {
+                pushButton = getControlButton(num);
+                controlButtonPressed(pushButton, num);
+            }
         }
         else {
             pushButton = getControlButton(grid_setNum);
             controlButtonPressed(pushButton, grid_setNum);
         }
+    }
+}
+
+void MainWindow::on_randomButton_clicked() {
+    on_clearButton_clicked();
+    ui->textBrowser->setText("Puzzle generated");
+    int loop = 8000, random = sameRandom, count = 0;
+    while(random == sameRandom) {
+        random = qrand() % loop;
+    }
+    sameRandom = random;
+    QFile localFile(":/src/generate/sudokuTable.txt");
+    localFile.open(QIODevice::ReadOnly);
+    QTextStream in(&localFile);
+    QString grid;
+    for(int i = 0; i < random + 1; ++i) {
+        grid = in.readLine();
+    }
+    localFile.close();
+
+    QPushButton *pushButton;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
+            grid_locked[i][j] = grid.split("")[++count].toInt();
+            pushButton = buttonGrid[i][j];
+            setButtonNum(pushButton, grid_locked[i][j], 40, FALSE);
+        }
+    }
+}
+
+void MainWindow::on_startGameButton_clicked() {
+    if (is_clickedAllStep == FALSE) {
+        if (is_gameStart == FALSE) {
+            ui->listWidget->clear();
+            ui->textBrowser->clear();
+            QPushButton *pushButton;
+            for(int i = 0; i < 9; ++i) {
+                for(int j = 0; j < 9; ++j) {
+                    if (grid_locked[i][j] != 0) {
+                        grid_edit[i][j] = 0;
+                    }
+                }
+            }
+            int resultType = startGuide(grid_locked, FALSE, 0);
+            if (resultType != -1) {
+                if (resultType == 1) {
+                    ui->textBrowser->setText("Game Start!");
+                    is_gameStart = TRUE;
+                }
+                else {
+                    ui->listWidget->addItem("Don't have Solution . . .");
+                    ui->textBrowser->setText("Don't have Solution\nSudoku may have many Solution (not Unique) or Sudoku is Invalid\nPlease re-enter Sudoku again");
+                    is_noSolution = TRUE;
+                    is_gameStart = FALSE;
+                }
+            }
+            else {
+                ui->listWidget->addItem("Invalid Sudoku! at r" + QString::number(coord.x + 1) + QString(tr("c")) + QString::number(coord.y + 1));
+                ui->textBrowser->setText("Invalid Sudoku! look at r" + QString::number(coord.x + 1) + QString(tr("c")) + QString::number(coord.y + 1) + "\nPlease re-enter Sudoku again");
+                pushButton = buttonGrid[coord.x][coord.y];
+                pushButton->setStyleSheet("QPushButton { color: rgb(0, 0, 0); border:1 px solid gray; background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
+                setButtonNum(pushButton, grid_locked[coord.x][coord.y], 40, TRUE);
+                for(int i = 0; i < 9; ++i) {
+                    for(int j = 0; j < 9; ++j) {
+                        grid_edit[i][j] = 0;
+                    }
+                }
+                is_inValid = TRUE;
+                is_gameStart = FALSE;
+            }
+        }
+        else {
+            int **sudoku;
+            sudoku = MemoryManage_2D(9, 9);
+            for(int i = 0; i < 9; ++i) {
+                for (int j = 0; j < 9; ++j) {
+                    if (grid_locked[i][j] != 0) {
+                        sudoku[i][j] = grid_locked[i][j];
+                    }
+                    grid_edit[i][j] = 0;
+                }
+            }
+            if(Find_EmptySlot(sudoku, 0, 0) == TRUE) {
+                ui->textBrowser->setText("UNFINISHED!");
+            }
+            else if(IsValid_Board(sudoku, 9, 9) == FALSE) {
+                ui->textBrowser->setText("WRONG! Look at r" + QString::number(coord.x + 1) + QString(tr("c")) + QString::number(coord.y + 1) + "\nTry again" );
+            }
+            else {
+                ui->textBrowser->setText("CORRECT!");
+            }
+        }
+    }
+    else {
+        ui->textBrowser->setText("Press 'New' and try again");
     }
 }

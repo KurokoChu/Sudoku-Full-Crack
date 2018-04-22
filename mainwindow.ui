@@ -2775,6 +2775,67 @@ background-color: rgba(155, 155, 155, 155);</string>
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
+        <widget class="QPushButton" name="randomButton">
+         <property name="geometry">
+          <rect>
+           <x>820</x>
+           <y>50</y>
+           <width>75</width>
+           <height>71</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+	color: rgb(255, 255, 255);
+	border:1 px solid gray;
+	background-color: #f19b38;
+}
+
+QPushButton::pressed {
+	background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+</string>
+         </property>
+         <property name="text">
+          <string>Generate
+Puzzle</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="startGameButton">
+         <property name="geometry">
+          <rect>
+           <x>730</x>
+           <y>50</y>
+           <width>75</width>
+           <height>71</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+	color: rgb(255, 255, 255);
+	border:1 px solid gray;
+	background-color: #f19b38;
+}
+
+QPushButton::pressed {
+	background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);
+}
+</string>
+         </property>
+         <property name="text">
+          <string>Start Game</string>
+         </property>
+        </widget>
        </widget>
       </item>
      </layout>

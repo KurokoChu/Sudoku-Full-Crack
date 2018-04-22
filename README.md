@@ -28,10 +28,10 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 The right side of the game is cell Activity number 1-9 to fill in the table.
 List step it's responsible for checking the wrong slot and displaying the correct information.When Press All possible step.
 Right bottom is 4 buttons, 
-* Start Game - Playable mode, you can play by yourself and check for solution
-* Generate Puzzle - Get Sudoku Puzzle
-* All possible step - Show the solution in each slot
-* New - Clear the table to start new game<br>
+* Start Game - Playable mode, you can play by yourself and check for solution, press again to see score result.
+* Generate Puzzle - Get Sudoku Puzzle can be different up to 8000 games.
+* All possible step - Show the solution in each slot.
+* New - Clear the table to start new game.<br>
 ![](/src/resource/readmeImg/ui_1.png)<br>
 You can set value in cell by clicking the panel to select the number and press on sudoku cell. You can also use numpad instead.<br>
 ![](/src/resource/readmeImg/ui_2.png)<br>

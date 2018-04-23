@@ -21,33 +21,44 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 * Qt >= 5.10
 * MinGW 5.30 32bit g++
 
+---
+
 # ![](img/build.png) Installation
 Download and Install [Qt Creator](https://www.qt.io/download) and follow the below setting
+<br><br>
 ![](img/set.png)
 
+<br>
+
     git clone https://github.com/KurokoChu/Sudoku-Full-Crack
+<br>
 
 Open SudokuFullCrack.pro and build it
+<br><br>
 ![](img/build_proj1.png)
 
 Make sure to select kit as Desktop Qt 5.10.1 MinGW 32bit
+<br><br>
 ![](img/build_proj2.png)
 
 Note. You can run execute file in release folder (for windows x86) instead of
 
 # ![](img/monitor.png) Interface
-![](/src/resource/readmeImg/ui_3.png)
+![](/src/resource/readmeImg/ui_3.png) 
+<br><br>
 The right side of the game is cell Activity number 1-9 to fill in the table.
 List step it's responsible for checking the wrong slot and displaying the correct information.When Press All possible step.
 Right bottom is 4 buttons, 
-* Start Game - Playable mode, you can play by yourself and check for solution, press again to see score result.
-* Generate Puzzle - Get Sudoku Puzzle can be different up to 8000 games.
-* All possible step - Show the solution in each slot.
-* New - Clear the table to start new game.<br>
+1. Start Game - Playable mode, you can play by yourself and check for solution, press again to see score result.
+2. Generate Puzzle - Get Sudoku Puzzle can be different up to 8000 games.
+3. All possible step - Show the solution in each slot.
+4. New - Clear the table to start new game.<br>
 ### You can set value in cell by clicking the panel to select the number and press on sudoku cell. You can also use numpad instead.
 ![](/src/resource/readmeImg/ui_1.png)<br>
-### You can learning how to solve Sudoku by double clicking the list of step in this panel.
+### Learning how to solve Sudoku by double clicking the list of step in this panel.
 ![](/src/resource/readmeImg/ui_2.png)<br>
+
+---
 
 ## Dataset
 * [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)

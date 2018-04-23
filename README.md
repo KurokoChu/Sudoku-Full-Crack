@@ -73,7 +73,7 @@ Right bottom is 4 buttons,
 
 
 ## Assistant Teacher
-|Kitsuchart Pasupa|Panwit Tuwanut|
+|Asst. Prof. Dr. Kitsuchart Pasupa|Asst. Prof. Dr. Panwit Tuwanut|
 |:-:|:-:|
 |![](img/pic_Oung.png)|![](img/pic_Panwit.png)|
 

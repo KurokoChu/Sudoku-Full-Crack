@@ -4,18 +4,14 @@
 A Project for Computer Programming @ KMITL
 
 # ![](img/pen.png) Introduction
-* Sudoku is a 9x9 grid number puzzle with 3x3 9-sub grid. Game start with a few of digits 1 - 9 in 9x9 grid,
+- Sudoku is a 9x9 grid number puzzle with 3x3 9-sub grid. Game start with a few of digits 1 - 9 in 9x9 grid,
 requires player to fill blanks in a 9x9 grid with digits. each column, each row, and each of the nine 3×3 subgrids must contains all of the digits from 1 to 9.
-* Sudoku Full Crack is a GUI program with Qt that will teach you how to complete a Sudoku, step by step, it will also teach you the used technique too.
-
----
+- Sudoku Full Crack is a GUI program with Qt that will teach you how to complete a Sudoku, step by step, it will also teach you the used technique too.
 
 # ![](img/doc.png) Objective
-* This Game for people who not have experiences for Sudoku.
-* This Game create for people who want to brain training make you more intelligent.
-* Helps in the habit of deliberate planning. make a free time to benefit.
-
----
+- This Game for people who not have experiences for Sudoku.
+- This Game create for people who want to brain training make you more intelligent.
+- Helps in the habit of deliberate planning. make a free time to benefit.
 
 # ![](img/check.png) Requirements
 * Qt >= 5.10
@@ -24,7 +20,8 @@ requires player to fill blanks in a 9x9 grid with digits. each column, each row,
 ---
 
 # ![](img/build.png) Installation
-Download and Install [Qt Creator](https://www.qt.io/download) and follow the below setting
+### Build with Qt Creator
+Download and Install [Qt Creator](https://www.qt.io/download) and follow the below setting.
 <br><br>
 ![](img/set.png)
 
@@ -33,17 +30,20 @@ Download and Install [Qt Creator](https://www.qt.io/download) and follow the bel
     git clone https://github.com/KurokoChu/Sudoku-Full-Crack
 <br>
 
-Open SudokuFullCrack.pro and build it
+Open SudokuFullCrack.pro and build it.
 <br><br>
 ![](img/build_proj1.png)
 
-Make sure to select kit as Desktop Qt 5.10.1 MinGW 32bit
+Make sure to select kit as Desktop Qt 5.10.1 MinGW 32bit.
 <br><br>
 ![](img/build_proj2.png)
 
-Note. You can run execute file in release folder (for windows x86) instead of
+### Release version (for Windows x86 platform)
+Run execute file in release folder (don't need to setup).
 
-# ![](img/monitor.png) Interface
+---
+
+# ![](img/monitor.png)Interface
 ![](/src/resource/readmeImg/ui_3.png) 
 <br><br>
 The right side of the game is cell Activity number 1-9 to fill in the table.

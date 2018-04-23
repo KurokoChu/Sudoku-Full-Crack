@@ -20,15 +20,22 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setMaximumSize(1080, 810);
 
     Setup();
+    ui->lcdNumber->setPalette(Qt::black);
+    ui->lcdNumber->setStyleSheet("background-color: rgba(0, 0, 0, 0); color: rgb(0, 0, 0, 0);");
+
 
     grid_setNum = 0;
     is_clickedAllStep = FALSE;
     is_inValid = FALSE;
     is_noSolution = FALSE;
     is_gameStart = FALSE;
+    is_gameStop = TRUE;
     is_clear = FALSE;
     optionCandidate = TRUE;
     sameRandom = -1;
+    timer = new QTimer(this);
+    timer_second = 0;
+    timer_minute = 0;
 
     grid_edited = MemoryManage_2D(9, 9);
     grid_step = MemoryManage_2D(9, 9);
@@ -37,33 +44,19 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             grid_edit[i][j] = 1;
-            grid_edited[i][j] = 0;
-            grid_merge[i][j] = 0;
         }
     }
 
-    setButtonNum(ui->pushButton_01, 1, 30, FALSE);
-    setButtonNum(ui->pushButton_02, 2, 30, FALSE);
-    setButtonNum(ui->pushButton_03, 3, 30, FALSE);
-    setButtonNum(ui->pushButton_04, 4, 30, FALSE);
-    setButtonNum(ui->pushButton_05, 5, 30, FALSE);
-    setButtonNum(ui->pushButton_06, 6, 30, FALSE);
-    setButtonNum(ui->pushButton_07, 7, 30, FALSE);
-    setButtonNum(ui->pushButton_08, 8, 30, FALSE);
-    setButtonNum(ui->pushButton_09, 9, 30, FALSE);
-
-    QPushButton* controlButtons[9] = { ui->pushButton_01, ui->pushButton_02, ui->pushButton_03, ui->pushButton_04, ui->pushButton_05, ui->pushButton_06, ui->pushButton_07, ui->pushButton_08, ui->pushButton_09 };
     buttonGrid = initButtonGrid();
-
-
     for (int i = 0; i < 9; i++) {
+        controlButtons[i] = getControlButton(i + 1);
+        setButtonNum(controlButtons[i], i + 1, 30, FALSE);
         connect(controlButtons[i], &QPushButton::clicked, [ = ]() { controlButtonPressed(controlButtons[i], i + 1); });
-    }
-    for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
             connect(buttonGrid[i][j], &QPushButton::clicked, [ = ]() { pushButtonPressed(buttonGrid[i][j], i + 1, j + 1); });
         }
     }
+    connect(timer, SIGNAL(timeout()), this, SLOT(timeCount()));
 
     if (optionCandidate == TRUE) {
         for (int i = 0; i < 9; ++i) {
@@ -73,7 +66,6 @@ MainWindow::MainWindow(QWidget *parent) :
         }
         gridCandidate(grid_merge);
     }
-
 }
 
 MainWindow::~MainWindow()
@@ -84,7 +76,8 @@ MainWindow::~MainWindow()
 void MainWindow::setButtonNum(QPushButton *pushButton, int num, int size, bool onlyHover) {
     if (num == 0) {
         pushButton->setIcon(QIcon(""));
-    } else if (num >= 1 && num <= 9) {
+    }
+    else if (num >= 1 && num <= 9) {
         QString strIcon = QString::fromUtf8(":/src/resource/img/");
         strIcon.push_back(QString("Num"));
         strIcon.push_back(QChar('0' + num));
@@ -193,7 +186,7 @@ SudokuGrid MainWindow::initButtonGrid() {
 }
 
 void MainWindow::on_allStepButton_clicked() {
-    if (is_clickedAllStep == FALSE && is_inValid == FALSE && is_noSolution == FALSE) {
+    if (is_clickedAllStep == FALSE && is_inValid == FALSE && is_noSolution == FALSE && is_gameStop == TRUE) {
         for(int i = 0; i < 9; ++i) {
             for(int j = 0; j < 9; ++j) {
                 if (grid_edited[i][j] != 0) {
@@ -255,12 +248,13 @@ void MainWindow::on_allStepButton_clicked() {
             is_inValid = TRUE;
         }
         is_clickedAllStep = TRUE;
-            for (int i = 0; i < 9; ++i) {
-                for (int j = 0; j < 9; ++j) {
-                    Update_Board(grid_merge, i, j);
-                }
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                eliminate[i][j].arr = MemoryManage_1D(9);
+                Update_Board(grid_merge, i, j);
             }
-            gridCandidate(grid_merge);
+        }
+        gridCandidate(grid_merge);
     }
 
 }
@@ -342,6 +336,11 @@ void MainWindow::on_clearButton_clicked() {
     if (optionCandidate == TRUE) {
         gridCandidate(grid_merge);
     }
+    is_gameStop = TRUE;
+    timer_second = 0;
+    timer_minute = 0;
+    ui->lcdNumber->setStyleSheet("background-color: rgba(0, 0, 0, 0); color: rgb(0, 0, 0, 0);");
+    ui->startGameButton->setText("Start Game");
 }
 
 void MainWindow::gridCandidate(int **grid) {
@@ -465,38 +464,40 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 }
 
 void MainWindow::on_randomButton_clicked() {
-    on_clearButton_clicked();
-    ui->textBrowser->setText("Puzzle generated");
-    int loop = 8000, random = sameRandom, count = 0;
-    while(random == sameRandom) {
-        random = qrand() % loop;
-    }
-    sameRandom = random;
-    QFile localFile(":/src/generate/sudokuTable.txt");
-    localFile.open(QIODevice::ReadOnly);
-    QTextStream in(&localFile);
-    QString grid;
-    for(int i = 0; i < random + 1; ++i) {
-        grid = in.readLine();
-    }
-    localFile.close();
+    if (is_gameStop == TRUE) {
+        on_clearButton_clicked();
+        ui->textBrowser->setText("Puzzle generated");
+        int loop = 8000, random = sameRandom, count = 0;
+        while(random == sameRandom) {
+            random = qrand() % loop;
+        }
+        sameRandom = random;
+        QFile localFile(":/src/generate/sudokuTable.txt");
+        localFile.open(QIODevice::ReadOnly);
+        QTextStream in(&localFile);
+        QString grid;
+        for(int i = 0; i < random + 1; ++i) {
+            grid = in.readLine();
+        }
+        localFile.close();
 
-    QPushButton *pushButton;
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            grid_locked[i][j] = grid.split("")[++count].toInt();
-            pushButton = buttonGrid[i][j];
-            setButtonNum(pushButton, grid_locked[i][j], 40, FALSE);
-            grid_merge[i][j] = grid_locked[i][j];
+        QPushButton *pushButton;
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                grid_locked[i][j] = grid.split("")[++count].toInt();
+                pushButton = buttonGrid[i][j];
+                setButtonNum(pushButton, grid_locked[i][j], 40, FALSE);
+                grid_merge[i][j] = grid_locked[i][j];
+            }
         }
-    }
-    for (int i = 0; i < 9; ++i) {
-        for (int j = 0; j < 9; ++j) {
-            Update_Board(grid_merge, i, j);
+        for (int i = 0; i < 9; ++i) {
+            for (int j = 0; j < 9; ++j) {
+                Update_Board(grid_merge, i, j);
+            }
         }
-    }
-    if (optionCandidate == TRUE) {
-        gridCandidate(grid_merge);
+        if (optionCandidate == TRUE) {
+            gridCandidate(grid_merge);
+        }
     }
 }
 
@@ -518,7 +519,12 @@ void MainWindow::on_startGameButton_clicked() {
             if (resultType != -1) {
                 if (resultType == 1) {
                     ui->textBrowser->setText("Game Start!");
+                    ui->startGameButton->setText("Stop");
+                    ui->lcdNumber->setStyleSheet("background-color: rgba(0, 0, 0, 0); color: rgb(255, 255, 255);");
                     is_gameStart = TRUE;
+                    is_gameStop = FALSE;
+                    timer->start(1000);
+                    timeCount();
                 }
                 else {
                     ui->listWidget->addItem("Don't have Solution . . .");
@@ -543,6 +549,10 @@ void MainWindow::on_startGameButton_clicked() {
             }
         }
         else {
+            is_gameStop = TRUE;
+            ui->startGameButton->setText("Stop");
+            timer_second = 0;
+            timer_minute = 0;
             int **sudoku;
             sudoku = MemoryManage_2D(9, 9);
             for(int i = 0; i < 9; ++i) {
@@ -571,3 +581,21 @@ void MainWindow::on_startGameButton_clicked() {
     }
 }
 
+void MainWindow::timeCount() {
+    if (is_gameStop == FALSE) {
+        show_time = QString(":");
+        show_time.push_front(QString(timer_minute % 10 + '0'));
+        show_time.push_front(QString((timer_minute % 100) / 10 + '0'));
+        show_time.push_back(QString((timer_second % 100) / 10 + '0'));
+        show_time.push_back(QString(timer_second % 10 + '0'));
+        ui->lcdNumber->display(show_time);
+        timer_second++;
+        if (timer_second >= 60) {
+            timer_second = 0;
+            timer_minute++;
+            if (timer_minute >= 60) {
+                timer_minute = 0;
+            }
+        }
+    }
+}

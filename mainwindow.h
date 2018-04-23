@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QPushButton>
+#include <QTimer>
 
 using SudokuGrid = std::array<std::array<QPushButton*, 9>, 9>;
 
@@ -27,6 +28,7 @@ private slots:
     void keyPressEvent(QKeyEvent *event);
     void on_randomButton_clicked();
     void on_startGameButton_clicked();
+    void timeCount();
 
 private:
     Ui::MainWindow *ui;
@@ -37,15 +39,21 @@ private:
     int **grid_step;
     int **grid_merge;
     int grid_setNum;
+    QPushButton* controlButtons[9];
     SudokuGrid buttonGrid;
     int onlyGetStepRound;
     int is_clickedAllStep;
     int is_inValid;
     int is_noSolution;
     int is_gameStart;
+    int is_gameStop;
     int is_clear;
     int optionCandidate;
     int sameRandom;
+    QTimer *timer;
+    QString show_time;
+    int timer_second;
+    int timer_minute;
 
     QPushButton* getControlButton(int num);
     void setButtonNum(QPushButton *pushButton, int num, int size, bool onlyHover);

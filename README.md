@@ -28,7 +28,6 @@ Download and Install [Qt Creator](https://www.qt.io/download) and follow the bel
 <br>
 
     git clone https://github.com/KurokoChu/Sudoku-Full-Crack
-<br>
 
 Open SudokuFullCrack.pro and build it.
 <br><br>

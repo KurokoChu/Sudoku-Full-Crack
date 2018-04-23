@@ -1,4 +1,4 @@
-![](/src/resource/readmeImg/banner.png)
+![](img/banner.png)
 
 # Sudoku Full Crack
 A Project for Computer Programming @ KMITL
@@ -43,7 +43,7 @@ Run execute file in release folder (don't need to setup).
 ---
 
 # ![](img/monitor.png)Interface
-![](/src/resource/readmeImg/ui_3.png) 
+![](img/ui_3.png) 
 <br><br>
 The right side of the game is cell Activity number 1-9 to fill in the table.
 List step it's responsible for checking the wrong slot and displaying the correct information.When Press All possible step.
@@ -53,9 +53,9 @@ Right bottom is 4 buttons,
 3. All possible step - Show the solution in each slot.
 4. New - Clear the table to start new game.<br>
 ### You can set value in cell by clicking the panel to select the number and press on sudoku cell. You can also use numpad instead.
-![](/src/resource/readmeImg/ui_1.png)<br>
+![](img/ui_1.png)<br>
 ### Learning how to solve Sudoku by double clicking the list of step in this panel.
-![](/src/resource/readmeImg/ui_2.png)<br>
+![](img/ui_2.png)<br>
 
 ---
 
@@ -65,7 +65,7 @@ Right bottom is 4 buttons,
 ---
 
 # Team Members
-|![](/src/resource/readmeImg/pic_59070191.jpg)|![](/src/resource/readmeImg/pic_60070088.jpg)|![](/src/resource/readmeImg/pic_60070099.jpg)|
+|![](img/pic_59070191.jpg)|![](img/pic_60070088.jpg)|![](img/pic_60070099.jpg)|
 |:-:|:-:|:-:|
 |Angkrit Boonrod|Wassapol Pungjap|Supakit Rodthong|
 |59070191|60070088|60070099|
@@ -75,7 +75,7 @@ Right bottom is 4 buttons,
 ## Assistant Teacher
 |Kitsuchart Pasupa|Panwit Tuwanut|
 |:-:|:-:|
-|![](/src/resource/readmeImg/pic_Oung.png)|![](/src/resource/readmeImg/pic_Panwit.png)|
+|![](img/pic_Oung.png)|![](img/pic_Panwit.png)|
 
 ---
 

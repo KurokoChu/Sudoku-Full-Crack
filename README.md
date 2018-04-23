@@ -42,7 +42,7 @@ Run execute file in release folder (don't need to setup).
 
 ---
 
-# ![](img/monitor.png)Interface
+# ![](img/monitor.png) Interface
 ![](img/ui_3.png) 
 <br><br>
 The right side of the game is cell Activity number 1-9 to fill in the table.
@@ -59,12 +59,12 @@ Right bottom is 4 buttons,
 
 ---
 
-## Dataset
+# ![](img/data.png) Dataset
 * [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)
 
 ---
 
-# Team Members
+# ![](img/team.png) Team Members
 |![](img/pic_59070191.jpg)|![](img/pic_60070088.jpg)|![](img/pic_60070099.jpg)|
 |:-:|:-:|:-:|
 |Angkrit Boonrod|Wassapol Pungjap|Supakit Rodthong|
@@ -72,7 +72,7 @@ Right bottom is 4 buttons,
 |(https://github.com/ITFSTUDENT191)|(https://github.com/abc666777)|(https://github.com/KurokoChu)
 
 
-## Assistant Teacher
+# ![](img/team.png) Assistant Teacher
 |Kitsuchart Pasupa|Panwit Tuwanut|
 |:-:|:-:|
 |![](img/pic_Oung.png)|![](img/pic_Panwit.png)|

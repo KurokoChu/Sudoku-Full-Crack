@@ -3,23 +3,23 @@
 # Sudoku Full Crack
 A Project for Computer Programming @ KMITL
 
-# ![](img/pen.png) Introduction
+# ![](img/pen.png)Introduction
 - Sudoku is a 9x9 grid number puzzle with 3x3 9-sub grid. Game start with a few of digits 1 - 9 in 9x9 grid,
 requires player to fill blanks in a 9x9 grid with digits. each column, each row, and each of the nine 3×3 subgrids must contains all of the digits from 1 to 9.
 - Sudoku Full Crack is a GUI program with Qt that will teach you how to complete a Sudoku, step by step, it will also teach you the used technique too.
 
-# ![](img/doc.png) Objective
+# ![](img/doc.png)Objective
 - This Game for people who not have experiences for Sudoku.
 - This Game create for people who want to brain training make you more intelligent.
 - Helps in the habit of deliberate planning. make a free time to benefit.
 
-# ![](img/check.png) Requirements
+# ![](img/check.png)Requirements
 * Qt >= 5.10
 * MinGW 5.30 32bit g++
 
 ---
 
-# ![](img/build.png) Installation
+# ![](img/build.png)Installation
 ### Build with Qt Creator
 Download and Install [Qt Creator](https://www.qt.io/download) and follow the below setting.
 <br><br>
@@ -59,12 +59,12 @@ Right bottom is 4 buttons,
 
 ---
 
-## Dataset
+# ![](img/data.png)Dataset
 * [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)
 
 ---
 
-# Team Members
+# ![](img/team.png)Team Members
 |![](img/pic_59070191.jpg)|![](img/pic_60070088.jpg)|![](img/pic_60070099.jpg)|
 |:-:|:-:|:-:|
 |Angkrit Boonrod|Wassapol Pungjap|Supakit Rodthong|
@@ -72,7 +72,7 @@ Right bottom is 4 buttons,
 |(https://github.com/ITFSTUDENT191)|(https://github.com/abc666777)|(https://github.com/KurokoChu)
 
 
-## Assistant Teacher
+# ![](img/team.png)Assistant Teacher
 |Kitsuchart Pasupa|Panwit Tuwanut|
 |:-:|:-:|
 |![](img/pic_Oung.png)|![](img/pic_Panwit.png)|

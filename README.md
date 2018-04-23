@@ -1,29 +1,41 @@
-﻿![](/src/resource/readmeImg/banner.png)
+![](/src/resource/readmeImg/banner.png)
 
 # Sudoku Full Crack
 A Project for Computer Programming @ KMITL
 
-## Definition
+# ![](img/pen.png) Introduction
 * Sudoku is a 9x9 grid number puzzle with 3x3 9-sub grid. Game start with a few of digits 1 - 9 in 9x9 grid,
 requires player to fill blanks in a 9x9 grid with digits. each column, each row, and each of the nine 3×3 subgrids must contains all of the digits from 1 to 9.
-* Sudoku Full Crack is a program that will teach you how to complete a Sudoku, step by step, it will also teach you the used technique too.
+* Sudoku Full Crack is a GUI program with Qt that will teach you how to complete a Sudoku, step by step, it will also teach you the used technique too.
 
-## Requirement 
-* Qt 5.10
-* MinGW 5.30 32bit g++
-* Windows platform
+---
 
-## Objective
+# ![](img/doc.png) Objective
 * This Game for people who not have experiences for Sudoku.
 * This Game create for people who want to brain training make you more intelligent.
 * Helps in the habit of deliberate planning. make a free time to benefit.
 
-## How to build
-* Install Qt Creator
-* Open SudokuFullCrack.pro and build it
-* You can Run execute file in release instead
+---
 
-# Sample Interface
+# ![](img/check.png) Requirements
+* Qt >= 5.10
+* MinGW 5.30 32bit g++
+
+# ![](img/build.png) Installation
+Download and Install [Qt Creator](https://www.qt.io/download) and follow the below setting
+![](img/set.png)
+
+    git clone https://github.com/KurokoChu/Sudoku-Full-Crack
+
+Open SudokuFullCrack.pro and build it
+![](img/build_proj1.png)
+
+Make sure to select kit as Desktop Qt 5.10.1 MinGW 32bit
+![](img/build_proj2.png)
+
+Note. You can run execute file in release folder (for windows x86) instead of
+
+# ![](img/monitor.png) Interface
 ![](/src/resource/readmeImg/ui_3.png)
 The right side of the game is cell Activity number 1-9 to fill in the table.
 List step it's responsible for checking the wrong slot and displaying the correct information.When Press All possible step.
@@ -42,7 +54,7 @@ Right bottom is 4 buttons,
 
 ---
 
-## Team Members
+# Team Members
 |![](/src/resource/readmeImg/pic_59070191.jpg)|![](/src/resource/readmeImg/pic_60070088.jpg)|![](/src/resource/readmeImg/pic_60070099.jpg)|
 |:-:|:-:|:-:|
 |Angkrit Boonrod|Wassapol Pungjap|Supakit Rodthong|

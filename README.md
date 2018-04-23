@@ -69,7 +69,7 @@ Right bottom is 4 buttons,
 |:-:|:-:|:-:|
 |Angkrit Boonrod|Wassapol Pungjap|Supakit Rodthong|
 |59070191|60070088|60070099|
-|(https://github.com/ITFSTUDENT191)|(https://github.com/abc666777)|(https://github.com/KurokoChu)
+|[@ITFSTUDENT191](https://github.com/ITFSTUDENT191)|[@abc666777](https://github.com/abc666777)|[@KurokoChu](https://github.com/KurokoChu)
 
 
 # ![](img/team.png) Assistant Teacher

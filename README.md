@@ -58,38 +58,38 @@ Right bottom is 4 buttons,
 ![](img/ui_2.png)<br>
 
 ---
-# ![](img/.png) How to use
-Select the number by clicking or pressing the numpad and fill it into cell.
+# ![](img/use_0.png) How to use
+### Select the number by click the numpad on 'Cell Activity' tab or press the numpad keyboard and fill it into cell.
 ![](img/use_1.png)
 
-Each cell will display what digit you can fill it into cell aka. 'Digit Candidate'
+### Each cell will display what digit you can fill it into cell aka. 'Digit Candidate'.
 ![](img/use_2.png)
 
-Press Start to play as Playable Mode.
+### Press 'Start' to play as Playable Mode.
 ![](img/use_3.png)
 
-and if Sudoku didn't have solution.
+### and if Sudoku don't have solution.
 ![](img/use_4.png)
 
-or it's it not Sudoku (Invalid).
+### or it isn't Sudoku (Invalid).
 ![](img/use_5.png)
 
-When you enter Sudoku and press 'Start' to play as Playable Mode, timer will start.
+### When you enter Sudoku and press 'Start' to play as Playable Mode, timer will start.
 ![](img/use_6.png)
 
-Once you finish the game press 'Stop' to see result and timer will stop.
+### Once you finish the game press 'Stop' to see result and timer will stop.
 ![](img/use_7.png)
 
-or press All possible step to see how so solve Sudoku.
+### or press 'All possible step' to see how so solve Sudoku.
 ![](img/use_8.png)
 
-Double clicking at each step and learn it.
+### Double click at each step and learn it.
 ![](img/use_9.png)
 
-In this screen you will see score result.
+### In this screen you will see score result.
 ![](img/use_10.png)
 
-Press 'New' to start new game.
+### Press 'New' to start new game.
 ![](img/use_11.png)
 
 ---

@@ -29,7 +29,7 @@ int FullHouse_Row(int **board, int row, int col) {
                 coord.x = row;
                 coord.y = col;
                 if (CanFillIn(i + 1, board, 9, 9) is True) {
-                    board[row][col] = i +1;
+                    board[row][col] = i + 1;
                     return True;
                 }
             }
@@ -53,7 +53,7 @@ int FullHouse_Col(int **board, int row, int col) {
             coord.y = col;
             if (fill_arr[i] is EmptySlot) {
                 if (CanFillIn(i + 1, board, 9, 9) is True) {
-                    board[row][col] = i +1;
+                    board[row][col] = i + 1;
                     return True;
                 }
             }

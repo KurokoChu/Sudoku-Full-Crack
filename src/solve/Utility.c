@@ -6,11 +6,10 @@ void Setup() {
         for (int j = 0; j < 9; ++j) {
             cell[i][j].arr = MemoryManage_1D(9);
             eliminate[i][j].arr = MemoryManage_1D(9);
-            lock_pair[i][j].arr = MemoryManage_1D(1);
-            lock_can1[i][j].arr = MemoryManage_1D(1);
+            sudoBoard[i][j].num = 0;
         }
     }
-    for (int i = 0; i < 12; ++i) {
+    for (int i = 0; i < 13; ++i) {
         score[i].num = False;
         score[i].arr = MemoryManage_1D(1);
     }
@@ -19,7 +18,7 @@ void Setup() {
         textGuide[i].numCoord = 0;
     }
     textGuide[0].text[0] = '\0';
-    textSummary.text = MemoryManage_1D(1000);
+    textSummary.text = MemoryManage_1D_Char(1000);
     textSummary.text[0] = '\0';
     coord_pair.arr = MemoryManage_1D(2);
 }

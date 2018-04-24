@@ -149,7 +149,7 @@ int DoStep(int **board, int row, int col, int step) {
             if (Find_LockedCandidates_1(board, row, col) is True) {
                 score[5].num = True;
                 score[5].arr[0]++;
-                sprintf(text, "Locked Candidates Type 2 \"Claiming\" : [ %d ] in r%dc%d and r%dc%d", coord_pair.arr[0],
+                sprintf(text, "Locked Candidates Type 1 \"Point\" : [ %d ] in r%dc%d and r%dc%d", coord_pair.arr[0],
                                                                             coord_pair.x1 + 1, coord_pair.y1 + 1,
                                                                             coord_pair.x2 + 1, coord_pair.y2 + 1);
                 strcpy(textGuide[stepRound].text, text);

@@ -1,4 +1,4 @@
-#ifndef SODUKU_H_
+#ifndef SUDOKU_H_
 #define SUDOKU_H_
 
 #include <stdio.h>
@@ -27,16 +27,9 @@ typedef struct{
 } sudo;
 sudo cell[9][9];
 sudo eliminate[9][9];
-sudo lock_pair[9][9];
-sudo lock_can1[9][9];
-
-typedef struct{
-    int *arr;
-    int num;
-} sudo2;
-sudo2 sudoBoard[9][9];
-sudo2 score[8];
-sudo2 triple;
+sudo sudoBoard[9][9];
+sudo score[12];
+sudo triple;
 
 typedef struct{
     int x;
@@ -47,9 +40,8 @@ point coord;
 
 typedef struct {
     int x1, y1, x2, y2, x3, y3, x4, y4, *arr, num;
-} point2;
-point2 coord_pair;
-point2 coord_pair_text[9][9];
+} point_group;
+point_group coord_pair;
 
 // Global Variables
 int eliminated;

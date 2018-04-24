@@ -159,6 +159,7 @@ void MainWindow::pushButtonPressed(QPushButton *pushButton, int row, int col) {
         if (is_clickedAllStep == FALSE) {
             for (int i = 0; i < 9; ++i) {
                 for (int j = 0; j < 9; ++j) {
+                    eliminate[i][j].arr = MemoryManage_1D(9);
                     Update_Board(grid_merge, i, j);
                 }
             }
@@ -186,13 +187,26 @@ SudokuGrid MainWindow::initButtonGrid() {
 }
 
 void MainWindow::on_allStepButton_clicked() {
-    if (is_clickedAllStep == FALSE && is_inValid == FALSE && is_noSolution == FALSE && is_gameStop == TRUE) {
+    if (is_clickedAllStep == FALSE && is_inValid == FALSE && is_gameStop == TRUE) {
+        int **grid_temp, text[9][9] = {{0,9,0, 8,4,6, 0,0,3},
+                                       {3,4,6, 0,0,0, 0,0,0},
+                                       {0,0,0, 0,0,0, 0,0,0},
+
+                                       {0,0,5, 0,3,0, 0,0,2},
+                                       {0,1,4, 9,0,5, 3,8,0},
+                                       {2,0,0, 0,6,0, 1,0,0},
+
+                                       {0,0,0, 0,0,0, 0,0,0},
+                                       {0,0,0, 0,0,0, 2,0,9},
+                                       {5,0,0, 3,9,1, 0,4,0}};
+        grid_temp = MemoryManage_2D(9, 9);
         for(int i = 0; i < 9; ++i) {
             for(int j = 0; j < 9; ++j) {
                 if (grid_edited[i][j] != 0) {
                     grid_locked[i][j] = 0;
                     setButtonNum(buttonGrid[i][j], 0, 40, FALSE);
                 }
+                grid_temp[i][j] = grid_locked[i][j];
             }
         }
         QPushButton *pushButton;
@@ -218,8 +232,12 @@ void MainWindow::on_allStepButton_clicked() {
                 grid_edit[i][j] = 0;
             }
         }
-        gridCandidate(grid_merge);
         int resultType = startGuide(grid_locked, FALSE, 0);
+        for(int i = 0; i < 9; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                grid_locked[i][j] = grid_temp[i][j];
+            }
+        }
         ui->listWidget->clear();
         ui->textBrowser->clear();
         if (resultType != -1) {
@@ -248,21 +266,17 @@ void MainWindow::on_allStepButton_clicked() {
             is_inValid = TRUE;
         }
         is_clickedAllStep = TRUE;
-        for (int i = 0; i < 9; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                eliminate[i][j].arr = MemoryManage_1D(9);
-                Update_Board(grid_merge, i, j);
-            }
-        }
+        startGuide(grid_merge, TRUE, 0);
         gridCandidate(grid_merge);
     }
-
 }
 
 void MainWindow::on_listWidget_itemDoubleClicked() {
     if (is_inValid == FALSE) {
         int index = ui->listWidget->currentRow();
         int loop = index;
+        int **grid_temp;
+        grid_temp = MemoryManage_2D(9, 9);
         QPushButton *pushButton;
         for(int i = 0; i < 9; ++i) {
             for(int j = 0; j < 9; ++j) {
@@ -271,32 +285,32 @@ void MainWindow::on_listWidget_itemDoubleClicked() {
                     setButtonNum(pushButton, 0, 40, FALSE);
                 }
                 grid_merge[i][j] = grid_locked[i][j];
+                grid_step[i][j] = grid_locked[i][j];
+                grid_temp[i][j] = grid_locked[i][j];
                 pushButton->setStyleSheet("QPushButton { color: rgb(155, 155, 155); border:1 px solid gray; background-color: rgb(51, 51, 51); } QPushButton::pressed { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
             }
         }
         startGuide(grid_step, TRUE, index + 1);
-        gridCandidate(grid_step);
         selectGridCandidate(index);
-        startGuide(grid_step, TRUE, index);
         gridCandidate(grid_step);
-        if (is_noSolution == TRUE) {
-            startGuide(grid_step, TRUE, index);
-            gridCandidate(grid_step);
-        }
-        for(int num = 0; num < loop; ++num) {
-            int row = textGuide[num].row, col = textGuide[num].col;
-            if(row != 0 && col != 0) {
-                pushButton = buttonGrid[row - 1][col - 1];
-                pushButton->setText("");
-                setButtonNum(pushButton, sudoBoard[row - 1][col - 1].num, 40, TRUE);
-                grid_merge[row - 1][col - 1] = sudoBoard[row - 1][col - 1].num;
+        startGuide(grid_temp, TRUE, index);
+        gridCandidate(grid_temp);
+        for(int i = 0; i < 9; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                if (sudoBoard[i][j].num != 0) {
+                    pushButton = buttonGrid[i][j];
+                    pushButton->setText("");
+                    if (grid_locked[i][j] == 0) {
+                        setButtonNum(pushButton, sudoBoard[i][j].num, 40, TRUE);
+                    }
+                }
             }
         }
     }
-
 }
 
 void MainWindow::on_clearButton_clicked() {
+    Setup();
     QPushButton *pushButton;
     if (grid_setNum != 0) {
         pushButton = getControlButton(grid_setNum);
@@ -318,6 +332,7 @@ void MainWindow::on_clearButton_clicked() {
             grid_locked[i][j] = 0;
             grid_step[i][j] = 0;
             grid_merge[i][j] = 0;
+            grid_edited[i][j] = 0;
             setButtonNum(buttonGrid[i][j], 0, 40, FALSE);
             pushButton = buttonGrid[i][j];
             pushButton->setStyleSheet("QPushButton { border:1 px solid gray; background-color: rgb(51, 51, 51); } QPushButton::pressed { background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa); }");
@@ -492,9 +507,11 @@ void MainWindow::on_randomButton_clicked() {
         }
         for (int i = 0; i < 9; ++i) {
             for (int j = 0; j < 9; ++j) {
+                eliminate[i][j].arr = MemoryManage_1D(9);
                 Update_Board(grid_merge, i, j);
             }
         }
+        startGuide(grid_merge, TRUE, 0);
         if (optionCandidate == TRUE) {
             gridCandidate(grid_merge);
         }
@@ -504,6 +521,8 @@ void MainWindow::on_randomButton_clicked() {
 void MainWindow::on_startGameButton_clicked() {
     if (is_clickedAllStep == FALSE) {
         if (is_gameStart == FALSE) {
+            int **grid_temp;
+            grid_temp = MemoryManage_2D(9, 9);
             ui->listWidget->clear();
             ui->textBrowser->clear();
             QPushButton *pushButton;
@@ -513,9 +532,23 @@ void MainWindow::on_startGameButton_clicked() {
                         grid_edit[i][j] = 0;
                         grid_merge[i][j] = grid_locked[i][j];
                     }
+                    grid_temp[i][j] = grid_locked[i][j];
                 }
             }
             int resultType = startGuide(grid_locked, FALSE, 0);
+            for(int i = 0; i < 9; ++i) {
+                for(int j = 0; j < 9; ++j) {
+                    grid_locked[i][j] = grid_temp[i][j];
+                }
+            }
+            for(int i = 0; i < 9; ++i) {
+                for(int j = 0; j < 9; ++j) {
+                    if (grid_locked[i][j] != 0) {
+                        grid_edit[i][j] = 0;
+                        grid_merge[i][j] = grid_locked[i][j];
+                    }
+                }
+            }
             if (resultType != -1) {
                 if (resultType == 1) {
                     ui->textBrowser->setText("Game Start!");

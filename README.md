@@ -1,7 +1,6 @@
 ![](img/banner.png)
 
 # Sudoku Full Crack
-A Project for Computer Programming @ KMITL
 
 # ![](img/pen.png) Introduction
 - Sudoku is a 9x9 grid number puzzle with 3x3 9-sub grid. The Game start with a few of digits 1 - 9 in 9x9 grid,
@@ -91,29 +90,3 @@ Right bottom is 4 buttons,
 
 ### Press 'New' to start new game.
 ![](img/use_11.png)
-
----
-
-# ![](img/data.png) Dataset
-* [1M Games Sudoku](https://www.kaggle.com/bryanpark/sudoku)
-
----
-
-# ![](img/team.png) Team Members
-|![](img/pic_59070191.jpg)|![](img/pic_60070088.jpg)|![](img/pic_60070099.jpg)|
-|:-:|:-:|:-:|
-|Angkrit Boonrod|Wassapol Pungjap|Supakit Rodthong|
-|59070191|60070088|60070099|
-|[@ITFSTUDENT191](https://github.com/ITFSTUDENT191)|[@abc666777](https://github.com/abc666777)|[@KurokoChu](https://github.com/KurokoChu)
-
-
-# ![](img/team.png) Assistant Teacher
-|Asst. Prof. Dr. Kitsuchart Pasupa|Asst. Prof. Dr. Panwit Tuwanut|
-|:-:|:-:|
-|![](img/pic_Oung.png)|![](img/pic_Panwit.png)|
-
----
-
-Faculty of Information Technology
-
-King Mongkut's Institute of Technology Ladkrabang
